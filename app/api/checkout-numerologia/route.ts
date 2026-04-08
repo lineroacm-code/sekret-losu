@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 export async function POST() {
   try {
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card", "p24"],
+      payment_method_types: ["card", "blik"],
       mode: "payment",
 
       line_items: [

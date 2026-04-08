@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const { deviceId } = await req.json();
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card", "p24"],
+    payment_method_types: ["card", "blik"],
     mode: "payment",
     line_items: [
       {
