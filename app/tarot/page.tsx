@@ -196,14 +196,6 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [isLoading]);
 
-  const description = `To może dotyczyć dokładnie Twojej sytuacji:
-
-• co doprowadziło Cię do tego momentu  
-• co dzieje się teraz  
-• dokąd to zmierza
-
-Nie ogólnie. Konkretnie.`;
-
 const drawCards = () => {
   const shuffled = [...cardsData].sort(() => 0.5 - Math.random());
   const selected = shuffled.slice(0, 3);
@@ -450,16 +442,37 @@ return (
   Odpowiedź zajmie mniej niż 30 sekund
 </div>
 
-<p
-  style={{
-    whiteSpace: "pre-line",
-    lineHeight: 1.8,
-    fontSize: 17,
-    opacity: 0.85,
-  }}
->
-  {description}
-</p>
+<div style={{ lineHeight: 1.8, fontSize: 17, opacity: 0.85 }}>
+
+  <div style={{ marginBottom: 15 }}>
+    To może dotyczyć dokładnie Twojej sytuacji:
+  </div>
+
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 20,
+    }}
+  >
+    <div>• co doprowadziło Cię do tego momentu</div>
+    <div>• co dzieje się teraz</div>
+    <div>• dokąd to zmierza</div>
+  </div>
+
+  <div
+    style={{
+      fontWeight: 500,
+      color: "#fff",
+      marginTop: 10,
+    }}
+  >
+    Nie ogólnie. Konkretnie.
+  </div>
+
+</div>
 
 </div>
 
@@ -516,7 +529,7 @@ onMouseLeave={(e) => {
   e.currentTarget.style.transform = "scale(1)";
 }}
     >
-      Zobacz swój wynik – 10 zł
+      Sprawdź, co pokażą Twoje karty – 10 zł
     </button>
 
     <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14 }}>
