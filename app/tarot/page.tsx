@@ -196,17 +196,13 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [isLoading]);
 
-  const description = `To nie jest losowa interpretacja.
+  const description = `Ten rozkład pokaże:
 
-Rozkład oparty jest wyłącznie na Wielkich Arkanach — kartach, które symbolizują kluczowe momenty życia, decyzje i wewnętrzne przemiany.
+- co doprowadziło Cię do tego momentu  
+- co dzieje się teraz  
+- dokąd to zmierza  
 
-Każde rozłożenie tworzy unikalny układ, którego znaczenie powstaje dopiero w relacji między przeszłością, teraźniejszością i tym, co nadchodzi.
-
-Nie dostajesz ogólnych opisów. Otrzymujesz interpretację, która łączy symbole kart w spójną historię — często trafiając dokładnie tam, gdzie czujesz, że coś się dzieje, ale nie potrafisz tego nazwać.
-
-To narzędzie do refleksji.
-Do zobaczenia rzeczy z innej perspektywy.
-Do uchwycenia momentu, w którym jesteś — i kierunku, w którym zmierzasz.`;
+Nie ogólnie. Konkretnie.`;
 
 const drawCards = () => {
   const shuffled = [...cardsData].sort(() => 0.5 - Math.random());
@@ -410,7 +406,15 @@ return (
 >
   Tarot
 </h1>
-
+<p
+  style={{
+    fontSize: 20,
+    opacity: 0.9,
+    marginTop: 10,
+  }}
+>
+  Co się dzieje? Co było? Co dalej?
+</p>
   </div>
 </div>
 
@@ -453,8 +457,12 @@ return (
       <div style={{ width: "100%", maxWidth: 1000, textAlign: "center" }}>
         
 <div style={{ marginBottom: 40 }}>
-  {/* 💳 PŁATNOŚĆ */}
-  {!paid && !interpretation && (
+  <div style={{ marginBottom: 20, opacity: 0.8 }}>
+    Odpowiedź zajmie mniej niż 30 sekund
+  </div>
+{/* 💳 PŁATNOŚĆ */}
+{!paid && !interpretation && (
+  <div>
     <button
       onClick={async () => {
         const deviceId = getDeviceId();
@@ -478,9 +486,14 @@ return (
         cursor: "pointer",
       }}
     >
-      Odkryj swój rozkład - 10 PLN
+      Zobacz swój wynik – 10 zł
     </button>
-  )}
+
+    <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14 }}>
+      Zaskakująco trafne dla wielu osób
+    </div>
+  </div>
+)}
 
   {/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
   {paid && (justPaid || !interpretation) && (
@@ -497,7 +510,7 @@ return (
           cursor: "pointer",
         }}
       >
-        Rozłóż karty
+        Rozpocznij interpretację
       </button>
 
       <div style={{ marginTop: 10, opacity: 0.6 }}>
