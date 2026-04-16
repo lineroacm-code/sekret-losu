@@ -223,14 +223,7 @@ if (sessionId) {
 
       {/* CTA */}
 <div style={{ marginTop: 40 }}>
-  <div style={{ textAlign: "center", marginBottom: 20 }}>
-  <div style={{ fontSize: 18, marginBottom: 5 }}>
-    Wprowadź daty urodzenia
-  </div>
-  <div style={{ opacity: 0.6, fontSize: 14 }}>
-    To zajmie kilka sekund
-  </div>
-</div>
+
   {!paid && !result ? (
     // 🔥 PIERWSZA PŁATNOŚĆ
     <div
@@ -240,17 +233,16 @@ if (sessionId) {
         margin: "0 auto 30px auto",
       }}
     >
-<div style={{ lineHeight: 1.8, fontSize: 17, opacity: 0.85 }}>
+<div style={{ lineHeight: 1.8, fontSize: 17, opacity: 0.85, marginBottom: 30 }}>
 
   <div style={{ marginBottom: 15, fontSize: 20, color: "gold" }}>
     To nie jest przypadek, że na siebie trafiliście
   </div>
 
-  <div style={{ marginBottom: 20 }}>
-    Twoja data urodzenia to zapis schematów,
-    które wpływają na sposób, w jaki kochasz,
-    reagujesz i budujesz relacje.
-  </div>
+<div style={{ marginBottom: 20, opacity: 0.7 }}>
+  Twoja data urodzenia wpływa na to,
+  jak kochasz i budujesz relacje.
+</div>
 
   <div
     style={{
@@ -261,9 +253,9 @@ if (sessionId) {
       marginBottom: 20,
     }}
   >
-    <div>• czy tworzycie harmonię</div>
-    <div>• czy między Wami jest napięcie</div>
-    <div>• dlaczego czujesz to, co czujesz</div>
+<div>• czy to ma sens</div>
+<div>• czy to działa</div>
+<div>• czy to ma przyszłość</div>
   </div>
 
   <div style={{ fontWeight: 500, color: "#fff" }}>
@@ -272,36 +264,53 @@ if (sessionId) {
 
 </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginTop: 25 }}>
-        <button
-          onClick={async () => {
-            const res = await fetch("/api/checkout-numerologia", {
-              method: "POST",
-            });
+ <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 30 }}>
+  <button
+    onClick={async () => {
+      const res = await fetch("/api/checkout-numerologia", {
+        method: "POST",
+      });
 
-            const data = await res.json();
-            window.location.href = data.url;
-          }}
-          style={{
-            padding: "14px 28px",
-            fontSize: 18,
-            background: "linear-gradient(135deg, gold, #ffd700)",
-            color: "#000",
-            border: "none",
-            borderRadius: 12,
-            cursor: "pointer",
-          }}
-        >
-          Rozpocznij analizę – 10 PLN
-        </button>
-        <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14 }}>
-  Większość osób jest zaskoczona, jak trafne to jest
+      const data = await res.json();
+      window.location.href = data.url;
+    }}
+    style={{
+      padding: "14px 28px",
+      fontSize: 18,
+      background: "linear-gradient(135deg, gold, #ffd700)",
+      color: "#000",
+      border: "none",
+      borderRadius: 12,
+      cursor: "pointer",
+      transition: "all 0.25s ease",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "scale(1.05)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "scale(1)";
+    }}
+  >
+    Rozpocznij analizę – 10 PLN
+  </button>
+
+  <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14, textAlign: "center" }}>
+    Większość osób jest zaskoczona, jak trafne to jest
+  </div>
 </div>
-      </div>
     </div>
   ) : paid && !result ? (
     // 🔥 FORMULARZ
     <div style={{ marginTop: 20 }}>
+<div style={{ textAlign: "center", marginBottom: 20 }}>
+  <div style={{ fontSize: 18, marginBottom: 5 }}>
+    Wprowadź daty urodzenia
+  </div>
+  <div style={{ opacity: 0.6, fontSize: 14 }}>
+    To zajmie kilka sekund
+  </div>
+</div>
+
       <div
         style={{
           display: "flex",
