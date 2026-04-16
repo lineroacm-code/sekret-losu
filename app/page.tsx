@@ -93,7 +93,7 @@ const handleSubmit = async (e: any) => {
   </h1>
 
   <p style={{ fontSize: 20, opacity: 0.9, marginBottom: 30 }}>
-    Sprawdź, co naprawdę się dzieje
+    To nie jest przypadek, że tu jesteś
   </p>
 
   <div style={{ display: "flex", gap: 20, justifyContent: "center" }}>
@@ -108,7 +108,7 @@ const handleSubmit = async (e: any) => {
         cursor: "pointer",
       }}
     >
-      Tarot
+      Zobacz swój rozkład
     </button>
 
     <button
@@ -122,7 +122,7 @@ const handleSubmit = async (e: any) => {
         cursor: "pointer",
       }}
     >
-      Numerologia
+      Sprawdź dopasowanie
     </button>
   </div>
 </div>
@@ -148,7 +148,7 @@ const handleSubmit = async (e: any) => {
             fontSize: 18,
           }}
         >
-          Wybierz, czego chcesz się dowiedzieć
+          Wybierz, czego naprawdę chcesz się dowiedzieć
         </p>
       </section>
 
@@ -167,14 +167,14 @@ const handleSubmit = async (e: any) => {
         {[
 {
     title: "Tarot",
-    desc: "Co się dzieje? Co było wcześniej? Dokąd to zmierza?",
+    desc: "Zobacz, co doprowadziło Cię do tego momentu i co będzie dalej",
     img: "/cards/tarot.png",
     link: "/tarot",
     active: true,
   },
   {
     title: "Numerologia",
-    desc: "Sprawdź, czy naprawdę do siebie pasujecie.",
+    desc: "Sprawdź, czy naprawdę do siebie pasujecie",
     img: "/cards/numerologia.png",
     link: "/numerologia",
     active: true,
@@ -254,7 +254,7 @@ title={item.active ? "Kliknij, aby sprawdzić" : ""}
         cursor: "pointer",
       }}
     >
-      Sprawdź teraz
+      Zobacz swój wynik
     </button>
   )}
 </div>
