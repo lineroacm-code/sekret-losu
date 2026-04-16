@@ -101,10 +101,10 @@ const handleSubmit = async (e: any) => {
       onClick={() => (window.location.href = "/tarot")}
       style={{
         padding: "12px 24px",
-        background: "linear-gradient(135deg, gold, #ffd700)",
-        border: "none",
+        background: "rgba(255,255,255,0.1)",
+        border: "1px solid gold",
         borderRadius: 10,
-        fontWeight: 600,
+        color: "#fff",
         cursor: "pointer",
       }}
     >
