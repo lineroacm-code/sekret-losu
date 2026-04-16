@@ -291,11 +291,11 @@ if (sessionId) {
       e.currentTarget.style.transform = "scale(1)";
     }}
   >
-    Sprawdź, co jest między Wami – 10 zł
+    Odkryj, co naprawdę Was łączy – 10 zł
   </button>
 
   <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14, textAlign: "center" }}>
-    Większość osób jest zaskoczona, jak trafne to jest
+    Większość osób nie spodziewa się, jak trafne to jest
   </div>
 </div>
     </div>
