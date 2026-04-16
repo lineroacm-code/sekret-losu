@@ -78,24 +78,54 @@ const handleSubmit = async (e: any) => {
           }}
         />
 
-        <div style={{ position: "relative", zIndex: 2 }}>
-          <h1
-            style={{
-              fontSize: 64,
-              fontWeight: 600,
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              textShadow: "0 0 30px rgba(255,215,0,0.3)",
-              transform: heroVisible
-                ? "translateY(0px)"
-                : "translateY(30px)",
-              opacity: heroVisible ? 1 : 0,
-              transition: "all 0.8s ease",
-            }}
-          >
-            Sekret Losu
-          </h1>
-        </div>
+<div style={{ position: "relative", zIndex: 2, textAlign: "center" }}>
+  <h1
+    style={{
+      fontSize: 64,
+      fontWeight: 600,
+      letterSpacing: "2px",
+      textTransform: "uppercase",
+      textShadow: "0 0 30px rgba(255,215,0,0.3)",
+      marginBottom: 10,
+    }}
+  >
+    Sekret Losu
+  </h1>
+
+  <p style={{ fontSize: 20, opacity: 0.9, marginBottom: 30 }}>
+    Sprawdź, co naprawdę się dzieje
+  </p>
+
+  <div style={{ display: "flex", gap: 20, justifyContent: "center" }}>
+    <button
+      onClick={() => (window.location.href = "/tarot")}
+      style={{
+        padding: "12px 24px",
+        background: "linear-gradient(135deg, gold, #ffd700)",
+        border: "none",
+        borderRadius: 10,
+        fontWeight: 600,
+        cursor: "pointer",
+      }}
+    >
+      Tarot
+    </button>
+
+    <button
+      onClick={() => (window.location.href = "/numerologia")}
+      style={{
+        padding: "12px 24px",
+        background: "rgba(255,255,255,0.1)",
+        border: "1px solid gold",
+        borderRadius: 10,
+        color: "#fff",
+        cursor: "pointer",
+      }}
+    >
+      Numerologia
+    </button>
+  </div>
+</div>
       </div>
 
       {/* 🔥 OPIS + ZAKRES */}
@@ -115,13 +145,10 @@ const handleSubmit = async (e: any) => {
           style={{
             lineHeight: 1.8,
             opacity: 0.8,
-            fontSize: 17,
+            fontSize: 18,
           }}
         >
-          Każda analiza opiera się na symbolice, relacjach i ukrytych
-          znaczeniach. To nie są przypadkowe opisy — to interpretacje,
-          które łączą różne systemy w spójną całość i pomagają zobaczyć
-          więcej.
+          Wybierz, czego chcesz się dowiedzieć
         </p>
       </section>
 
@@ -138,40 +165,41 @@ const handleSubmit = async (e: any) => {
         }}
       >
         {[
-  {
+{
     title: "Tarot",
-    desc: "Rozkład oparty na Wielkich Arkanach — kartach symbolizujących kluczowe momenty życia. Interpretacja powstaje na podstawie konkretnego układu, łącząc przeszłość, teraźniejszość i kierunek, w którym zmierzasz.",
+    desc: "Co się dzieje? Co było wcześniej? Dokąd to zmierza?",
     img: "/cards/tarot.png",
     link: "/tarot",
     active: true,
   },
   {
     title: "Numerologia",
-    desc: "Analiza oparta na datach, które nie są przypadkowe. Układ liczb ujawnia zgodność, napięcia i ukryte zależności między Wami.",
+    desc: "Sprawdź, czy naprawdę do siebie pasujecie.",
     img: "/cards/numerologia.png",
     link: "/numerologia",
     active: true,
   },
   {
     title: "Horoskop - WKRÓTCE DOSTĘPNE",
-    desc: "Interpretacja oparta na układzie astrologicznym, który wpływa na emocje, decyzje i relacje.",
-    img: "/cards/horoskop.png",
+    desc: "Już niedługo dostępne.",
+    img: "/cards/Horoskop.png",
     active: false,
   },
   {
     title: "Energia - WKRÓTCE DOSTĘPNE",
-    desc: "Odczyt dynamiki między Wami — tego, co nie jest widoczne, ale realnie wpływa na relację.",
+    desc: "Już niedługo dostępne.",
     img: "/cards/energia.png",
     active: false,
   },
 ].map((item, i) => (
           <div
   key={i}
-  onClick={() => {
-    if (item.active && item.link) {
-      window.location.href = item.link;
-    }
-  }}
+onClick={() => {
+  if (item.active && item.link) {
+    window.location.href = item.link;
+  }
+}}
+title={item.active ? "Kliknij, aby sprawdzić" : ""}
   style={{
     display: "flex",
     gap: 30,
@@ -207,12 +235,29 @@ const handleSubmit = async (e: any) => {
               }}
             />
 
-            <div>
-              <h3 style={{ marginBottom: 10 }}>{item.title}</h3>
-              <p style={{ opacity: 0.7, lineHeight: 1.6 }}>
-                {item.desc}
-              </p>
-            </div>
+<div>
+  <h3 style={{ marginBottom: 10 }}>{item.title}</h3>
+
+  <p style={{ opacity: 0.7, lineHeight: 1.6 }}>
+    {item.desc}
+  </p>
+
+  {item.active && (
+    <button
+      style={{
+        marginTop: 10,
+        padding: "8px 16px",
+        background: "gold",
+        border: "none",
+        borderRadius: 8,
+        fontSize: 14,
+        cursor: "pointer",
+      }}
+    >
+      Sprawdź teraz
+    </button>
+  )}
+</div>
           </div>
         ))}
       </section>
