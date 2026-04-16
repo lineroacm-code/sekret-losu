@@ -214,7 +214,7 @@ const drawCards = () => {
   const loadingTexts = [
   "Tasowanie kart...",
   "Łączenie energii...",
-  "Odczyt symboli...",
+  "To może być ważne...",
   "Interpretacja układu...",
 ];
 
@@ -456,8 +456,9 @@ return (
       {/* 🔥 WRAPPER */}
       <div style={{ width: "100%", maxWidth: 1000, textAlign: "center" }}>
         
-<div style={{ marginBottom: 40 }}>
+<div style={{ marginBottom: 20 }}>
   <div style={{ marginBottom: 20, opacity: 0.8 }}>
+    To nie jest przypadek, że tu jesteś...
     Odpowiedź zajmie mniej niż 30 sekund
   </div>
 {/* 💳 PŁATNOŚĆ */}
@@ -490,7 +491,7 @@ return (
     </button>
 
     <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14 }}>
-      Zaskakująco trafne dla wielu osób
+      Większość osób jest zaskoczona, jak trafne to jest
     </div>
   </div>
 )}
@@ -671,7 +672,7 @@ return (
       ["Teraźniejszość", interpretation.present],
       ["Przyszłość", interpretation.future],
     ].map(([title, text], i) => (
-      <div key={i} style={{ marginBottom: 40 }}>
+      <div key={i} style={{ marginBottom: 20 }}>
         <div
           style={{
             color: "gold",
