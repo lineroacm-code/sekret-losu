@@ -426,6 +426,15 @@ return (
     textAlign: "center",
   }}
 >
+
+<div style={{ marginBottom: 20, fontSize: 18 }}>
+  To nie jest przypadek, że tu jesteś
+</div>
+
+<div style={{ marginBottom: 20, opacity: 0.7 }}>
+  Odpowiedź zajmie mniej niż 30 sekund
+</div>
+
 <p
   style={{
     whiteSpace: "pre-line",
@@ -436,6 +445,7 @@ return (
 >
   {description}
 </p>
+
 </div>
 
 <div style={{ height: 40 }} />
@@ -457,10 +467,7 @@ return (
       <div style={{ width: "100%", maxWidth: 1000, textAlign: "center" }}>
         
 <div style={{ marginBottom: 20 }}>
-  <div style={{ marginBottom: 20, opacity: 0.8 }}>
-    To nie jest przypadek, że tu jesteś...
-    Odpowiedź zajmie mniej niż 30 sekund
-  </div>
+
 {/* 💳 PŁATNOŚĆ */}
 {!paid && !interpretation && (
   <div>
@@ -477,15 +484,22 @@ return (
 
         window.location.href = data.url;
       }}
-      style={{
-        padding: "14px 28px",
-        fontSize: 18,
-        background: "linear-gradient(135deg, gold, #ffd700)",
-        color: "#000",
-        border: "none",
-        borderRadius: 12,
-        cursor: "pointer",
-      }}
+style={{
+  padding: "14px 28px",
+  fontSize: 18,
+  background: "linear-gradient(135deg, gold, #ffd700)",
+  color: "#000",
+  border: "none",
+  borderRadius: 12,
+  cursor: "pointer",
+  transition: "all 0.25s ease",
+}}
+onMouseEnter={(e) => {
+  e.currentTarget.style.transform = "scale(1.05)";
+}}
+onMouseLeave={(e) => {
+  e.currentTarget.style.transform = "scale(1)";
+}}
     >
       Zobacz swój wynik – 10 zł
     </button>
