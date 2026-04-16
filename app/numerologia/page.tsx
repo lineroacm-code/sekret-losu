@@ -291,7 +291,7 @@ if (sessionId) {
       e.currentTarget.style.transform = "scale(1)";
     }}
   >
-    Rozpocznij analizę – 10 PLN
+    Sprawdź, co jest między Wami – 10 zł
   </button>
 
   <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14, textAlign: "center" }}>
