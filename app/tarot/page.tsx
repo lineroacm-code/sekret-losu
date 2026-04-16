@@ -196,11 +196,11 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [isLoading]);
 
-  const description = `Ten rozkład pokaże:
+  const description = `To może dotyczyć dokładnie Twojej sytuacji:
 
-- co doprowadziło Cię do tego momentu  
-- co dzieje się teraz  
-- dokąd to zmierza  
+• co doprowadziło Cię do tego momentu  
+• co dzieje się teraz  
+• dokąd to zmierza
 
 Nie ogólnie. Konkretnie.`;
 
@@ -427,11 +427,26 @@ return (
   }}
 >
 
-<div style={{ marginBottom: 20, fontSize: 18 }}>
+<div
+  style={{
+    marginBottom: 15,
+    fontSize: 22,
+    fontWeight: 500,
+    color: "gold",
+    textShadow: "0 0 20px rgba(255,215,0,0.3)",
+  }}
+>
   To nie jest przypadek, że tu jesteś
 </div>
 
-<div style={{ marginBottom: 20, opacity: 0.7 }}>
+<div
+  style={{
+    marginBottom: 25,
+    opacity: 0.6,
+    fontSize: 14,
+    letterSpacing: 0.5,
+  }}
+>
   Odpowiedź zajmie mniej niż 30 sekund
 </div>
 
