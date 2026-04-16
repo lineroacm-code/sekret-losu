@@ -209,11 +209,28 @@ if (sessionId) {
     >
       Numerologia
     </h1>
+    <p
+  style={{
+    fontSize: 20,
+    opacity: 0.9,
+    marginTop: 10,
+  }}
+>
+  Czy to ma sens? Czy to działa? Czy to ma przyszłość?
+</p>
   </div>
 </div>
 
       {/* CTA */}
 <div style={{ marginTop: 40 }}>
+  <div style={{ textAlign: "center", marginBottom: 20 }}>
+  <div style={{ fontSize: 18, marginBottom: 5 }}>
+    Wprowadź daty urodzenia
+  </div>
+  <div style={{ opacity: 0.6, fontSize: 14 }}>
+    To zajmie kilka sekund
+  </div>
+</div>
   {!paid && !result ? (
     // 🔥 PIERWSZA PŁATNOŚĆ
     <div
@@ -223,23 +240,37 @@ if (sessionId) {
         margin: "0 auto 30px auto",
       }}
     >
-      <p
-        style={{
-          whiteSpace: "pre-line",
-          lineHeight: 1.8,
-          fontSize: 17,
-          opacity: 0.85,
-        }}
-      >
-        To nie jest przypadkowe dopasowanie.
+<div style={{ lineHeight: 1.8, fontSize: 17, opacity: 0.85 }}>
 
-        Twoja data urodzenia to zapis schematów, które wpływają na sposób,
-        w jaki kochasz, reagujesz i budujesz relacje.
+  <div style={{ marginBottom: 15, fontSize: 20, color: "gold" }}>
+    To nie jest przypadek, że na siebie trafiliście
+  </div>
 
-        Zestawienie dwóch dróg życia pokazuje, czy tworzycie harmonię,
-        czy napięcie — i dlaczego między Wami dzieje się dokładnie to,
-        co czujesz, ale trudno nazwać.
-      </p>
+  <div style={{ marginBottom: 20 }}>
+    Twoja data urodzenia to zapis schematów,
+    które wpływają na sposób, w jaki kochasz,
+    reagujesz i budujesz relacje.
+  </div>
+
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 20,
+    }}
+  >
+    <div>• czy tworzycie harmonię</div>
+    <div>• czy między Wami jest napięcie</div>
+    <div>• dlaczego czujesz to, co czujesz</div>
+  </div>
+
+  <div style={{ fontWeight: 500, color: "#fff" }}>
+    Nie ogólnie. Konkretnie.
+  </div>
+
+</div>
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: 25 }}>
         <button
@@ -263,6 +294,9 @@ if (sessionId) {
         >
           Rozpocznij analizę – 10 PLN
         </button>
+        <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14 }}>
+  Większość osób jest zaskoczona, jak trafne to jest
+</div>
       </div>
     </div>
   ) : paid && !result ? (
@@ -329,16 +363,24 @@ if (sessionId) {
       <div style={{ display: "flex", justifyContent: "center", marginTop: 25 }}>
         <button
           onClick={calculate}
-          style={{
-            padding: "12px 20px",
-            background: "#fff",
-            color: "#000",
-            border: "none",
-            borderRadius: 8,
-            cursor: "pointer",
-          }}
+style={{
+  padding: "14px 28px",
+  fontSize: 18,
+  background: "linear-gradient(135deg, gold, #ffd700)",
+  color: "#000",
+  border: "none",
+  borderRadius: 12,
+  cursor: "pointer",
+  transition: "all 0.25s ease",
+}}
+onMouseEnter={(e) => {
+  e.currentTarget.style.transform = "scale(1.05)";
+}}
+onMouseLeave={(e) => {
+  e.currentTarget.style.transform = "scale(1)";
+}}
         >
-          Sprawdź kompatybilność
+          Zobacz, co Was łączy
         </button>
       </div>
     </div>
@@ -392,6 +434,7 @@ if (sessionId) {
 
 {/* WYNIK */}
 {result && (
+  
   <div
     style={{
       opacity: showResult ? 1 : 0,
@@ -399,6 +442,12 @@ if (sessionId) {
       transition: "all 0.8s ease",
     }}
   >
+    <div style={{ textAlign: "center", marginBottom: 20 }}>
+      <div style={{ fontSize: 18, color: "gold" }}>
+        Wynik może Cię zaskoczyć
+      </div>
+    </div>
+
     <div style={{ marginTop: 30, textAlign: "center" }}>
       <button
         onClick={async () => {
