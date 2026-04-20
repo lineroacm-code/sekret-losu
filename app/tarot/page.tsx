@@ -512,59 +512,50 @@ return (
   <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
 
     {/* OGÓLNY */}
-    <div style={{ width: 260, background: "#111", padding: 20, borderRadius: 16 }}>
-      <h3>Co los chce Ci powiedzieć</h3>
+    <div
+      onClick={async () => {
+        setReadingType("general");
+        localStorage.setItem("readingType", "general");
+
+        const deviceId = getDeviceId();
+
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          body: JSON.stringify({
+            deviceId,
+            type: "general",
+            priceId: "https://buy.stripe.com/28EfZi6ze5Y26pS2GCaZi04",
+          }),
+        });
+
+        const data = await res.json();
+        window.location.href = data.url;
+      }}
+      style={{
+        width: 260,
+        background: "#111",
+        padding: 20,
+        borderRadius: 16,
+        cursor: "pointer",
+        transition: "all 0.25s ease",
+      }}
+onMouseEnter={(e) => {
+  e.currentTarget.style.transform = "translateY(-5px)";
+  e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+}}
+onMouseLeave={(e) => {
+  e.currentTarget.style.transform = "translateY(0)";
+  e.currentTarget.style.boxShadow = "none";
+}}
+      }}
+    >
+      <h3>Rozkład ogólny</h3>
       <p style={{ opacity: 0.7 }}>Ogólna energia i kierunek</p>
-      <button
-        onClick={async () => {
-          setReadingType("general");
-          localStorage.setItem("readingType", "general");
-
-          const deviceId = getDeviceId();
-
-          const res = await fetch("/api/checkout", {
-            method: "POST",
-            body: JSON.stringify({
-              deviceId,
-              type: "general",
-              priceId: "https://buy.stripe.com/28EfZi6ze5Y26pS2GCaZi04",
-            }),
-          });
-
-          const data = await res.json();
-          window.location.href = data.url;
-        }}
-        style={{
-          marginTop: 12,
-          padding: "10px 16px",
-          fontSize: 15,
-          background: "linear-gradient(135deg, #1a1a1a, #000)",
-          color: "#fff",
-          border: "1px solid rgba(255,215,0,0.3)",
-          borderRadius: 10,
-          cursor: "pointer",
-          transition: "all 0.25s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
-          e.currentTarget.style.border = "1px solid gold";
-          e.currentTarget.style.boxShadow = "0 0 20px rgba(255,215,0,0.3)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0px) scale(1)";
-          e.currentTarget.style.border = "1px solid rgba(255,215,0,0.3)";
-          e.currentTarget.style.boxShadow = "none";
-        }}
-      >
-        Sprawdź – 10 PLN
-      </button>
+      <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
     </div>
 
-    {/* MIŁOSNY */}
-    <div style={{ width: 260, background: "#111", padding: 20, borderRadius: 16, border: "2px solid gold" }}>
-      <h3>Co on/ona czuje</h3>
-      <p style={{ opacity: 0.7 }}>Ukryte emocje i intencje</p>
-          <button
+    {/* MIŁOSNY (highlight) */}
+    <div
       onClick={async () => {
         setReadingType("love");
         localStorage.setItem("readingType", "love");
@@ -584,34 +575,30 @@ return (
         window.location.href = data.url;
       }}
       style={{
-        marginTop: 12,
-        padding: "10px 16px",
-        fontSize: 15,
-        background: "linear-gradient(135deg, #1a1a1a, #000)",
-        color: "#fff",
-        border: "1px solid gold",
-        borderRadius: 10,
+        width: 260,
+        background: "#111",
+        padding: 20,
+        borderRadius: 16,
         cursor: "pointer",
         transition: "all 0.25s ease",
+        border: "1px solid rgba(255,215,0,0.2)", // 🔥 tylko tutaj
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
-        e.currentTarget.style.boxShadow = "0 0 25px rgba(255,215,0,0.5)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0px) scale(1)";
-        e.currentTarget.style.boxShadow = "none";
-      }}
+onMouseEnter={(e) => {
+  e.currentTarget.style.transform = "translateY(-5px)";
+  e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+}}
+onMouseLeave={(e) => {
+  e.currentTarget.style.transform = "translateY(0)";
+  e.currentTarget.style.boxShadow = "none";
+}}
     >
-      Sprawdź – 10 PLN
-    </button>
+      <h3>Rozkład miłosny</h3>
+      <p style={{ opacity: 0.7 }}>Ukryte emocje i intencje</p>
+      <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
     </div>
 
     {/* PYTANIE */}
-    <div style={{ width: 260, background: "#111", padding: 20, borderRadius: 16 }}>
-      <h3>Zadaj własne pytanie</h3>
-      <p style={{ opacity: 0.7 }}>Pełna personalizacja</p>
-      <button
+    <div
       onClick={async () => {
         setReadingType("question");
         localStorage.setItem("readingType", "question");
@@ -631,29 +618,25 @@ return (
         window.location.href = data.url;
       }}
       style={{
-        marginTop: 12,
-        padding: "10px 16px",
-        fontSize: 15,
-        background: "linear-gradient(135deg, #1a1a1a, #000)",
-        color: "#fff",
-        border: "1px solid rgba(255,215,0,0.3)",
-        borderRadius: 10,
+        width: 260,
+        background: "#111",
+        padding: 20,
+        borderRadius: 16,
         cursor: "pointer",
         transition: "all 0.25s ease",
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
-        e.currentTarget.style.border = "1px solid gold";
-        e.currentTarget.style.boxShadow = "0 0 20px rgba(255,215,0,0.3)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0px) scale(1)";
-        e.currentTarget.style.border = "1px solid rgba(255,215,0,0.3)";
-        e.currentTarget.style.boxShadow = "none";
-      }}
+onMouseEnter={(e) => {
+  e.currentTarget.style.transform = "translateY(-5px)";
+  e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+}}
+onMouseLeave={(e) => {
+  e.currentTarget.style.transform = "translateY(0)";
+  e.currentTarget.style.boxShadow = "none";
+}}
     >
-      Zadaj pytanie – 20 PLN
-    </button>
+      <h3>Własne pytanie</h3>
+      <p style={{ opacity: 0.7 }}>Pełna personalizacja</p>
+      <div style={{ marginTop: 10, color: "gold" }}>Zadaj pytanie – 20 PLN</div>
     </div>
 
   </div>
