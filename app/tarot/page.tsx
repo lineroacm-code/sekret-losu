@@ -47,6 +47,8 @@ export default function Home() {
   const [isRevealing, setIsRevealing] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
+  const [readingType, setReadingType] = useState<"general" | "love" | "question" | null>(null);
+  const [userQuestion, setUserQuestion] = useState("");
   const getDeviceId = () => {
       let id = localStorage.getItem("deviceId");
       if (!id) {
@@ -77,7 +79,11 @@ export default function Home() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ cards: cardNames }),
+      body: JSON.stringify({
+  cards: cardNames,
+  type: readingType,
+  question: userQuestion,
+}),
     });
 
     const data = await response.json();
@@ -136,6 +142,11 @@ useEffect(() => {
   if (paid === "true") {
     setPaid(true);
   }
+}, []);
+
+useEffect(() => {
+  const type = localStorage.getItem("readingType");
+  if (type) setReadingType(type as any);
 }, []);
 
 useEffect(() => {
@@ -498,69 +509,133 @@ return (
 
 {/* 💳 PŁATNOŚĆ */}
 {!paid && !interpretation && (
+  <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+
+    {/* OGÓLNY */}
+    <div style={{ width: 260, background: "#111", padding: 20, borderRadius: 16 }}>
+      <h3>Co los chce Ci powiedzieć</h3>
+      <p style={{ opacity: 0.7 }}>Ogólna energia i kierunek</p>
+      <button
+        onClick={async () => {
+          setReadingType("general");
+          localStorage.setItem("readingType", "general");
+          const deviceId = getDeviceId();
+
+          const res = await fetch("/api/checkout", {
+            method: "POST",
+            body: JSON.stringify({
+              deviceId,
+              type: "general",
+              // 🔥 PODMIENISZ NA SWÓJ LINK STRIPE
+              priceId: "https://buy.stripe.com/28EfZi6ze5Y26pS2GCaZi04",
+            }),
+          });
+
+          const data = await res.json();
+          window.location.href = data.url;
+        }}
+      >
+        Sprawdź – 10 PLN
+      </button>
+    </div>
+
+    {/* MIŁOSNY */}
+    <div style={{ width: 260, background: "#111", padding: 20, borderRadius: 16, border: "2px solid gold" }}>
+      <h3>Co on/ona czuje</h3>
+      <p style={{ opacity: 0.7 }}>Ukryte emocje i intencje</p>
+      <button
+        onClick={async () => {
+          setReadingType("love");
+          localStorage.setItem("readingType", "love"); // ✅ TU
+          const deviceId = getDeviceId();
+
+          const res = await fetch("/api/checkout", {
+            method: "POST",
+            body: JSON.stringify({
+              deviceId,
+              type: "love",
+              priceId: "https://buy.stripe.com/5kQ3cw7Di86a4hKa94aZi05",
+            }),
+          });
+
+          const data = await res.json();
+          window.location.href = data.url;
+        }}
+      >
+        Sprawdź – 10 PLN
+      </button>
+    </div>
+
+    {/* PYTANIE */}
+    <div style={{ width: 260, background: "#111", padding: 20, borderRadius: 16 }}>
+      <h3>Zadaj własne pytanie</h3>
+      <p style={{ opacity: 0.7 }}>Pełna personalizacja</p>
+      <button
+        onClick={async () => {
+          setReadingType("question");
+          localStorage.setItem("readingType", "question");
+          const deviceId = getDeviceId();
+
+          const res = await fetch("/api/checkout", {
+            method: "POST",
+            body: JSON.stringify({
+              deviceId,
+              type: "question",
+              priceId: "https://buy.stripe.com/eVq3cw6ze4TY7tW4OKaZi06",
+            }),
+          });
+
+          const data = await res.json();
+          window.location.href = data.url;
+        }}
+      >
+        Zadaj pytanie – 20 PLN
+      </button>
+    </div>
+
+  </div>
+)}
+s
+
+  {/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
+{paid && (justPaid || !interpretation) && (
   <div>
+    {readingType === "question" && (
+      <textarea
+        placeholder="Wpisz swoje pytanie..."
+        value={userQuestion}
+        onChange={(e) => setUserQuestion(e.target.value.slice(0, 300))}
+        style={{
+          width: "100%",
+          maxWidth: 500,
+          height: 100,
+          marginBottom: 15,
+          padding: 10,
+          borderRadius: 10,
+        }}
+      />
+    )}
+
     <button
-      onClick={async () => {
-        const deviceId = getDeviceId();
-
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          body: JSON.stringify({ deviceId }),
-        });
-
-        const data = await res.json();
-
-        window.location.href = data.url;
+      onClick={startReadingFlow}
+      style={{
+        padding: "12px 20px",
+        fontSize: 16,
+        background: "#fff",
+        color: "#000",
+        border: "none",
+        borderRadius: 8,
+        cursor: "pointer",
       }}
-style={{
-  padding: "14px 28px",
-  fontSize: 18,
-  background: "linear-gradient(135deg, gold, #ffd700)",
-  color: "#000",
-  border: "none",
-  borderRadius: 12,
-  cursor: "pointer",
-  transition: "all 0.25s ease",
-}}
-onMouseEnter={(e) => {
-  e.currentTarget.style.transform = "scale(1.05)";
-}}
-onMouseLeave={(e) => {
-  e.currentTarget.style.transform = "scale(1)";
-}}
     >
-      Sprawdź, co pokażą Twoje karty – 10 zł
+      Rozpocznij interpretację
     </button>
 
-    <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14 }}>
-      Większość osób jest zaskoczona, jak trafne to jest
+    <div style={{ marginTop: 10, opacity: 0.6 }}>
+      Kliknij, aby rozpocząć interpretację
     </div>
   </div>
 )}
-
-  {/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
-  {paid && (justPaid || !interpretation) && (
-    <div>
-      <button
-        onClick={startReadingFlow}
-        style={{
-          padding: "12px 20px",
-          fontSize: 16,
-          background: "#fff",
-          color: "#000",
-          border: "none",
-          borderRadius: 8,
-          cursor: "pointer",
-        }}
-      >
-        Rozpocznij interpretację
-      </button>
-
-      <div style={{ marginTop: 10, opacity: 0.6 }}>
-        Kliknij, aby rozpocząć interpretację
-      </div>
-    </div>
-  )}
 
   {/* 🔁 KOLEJNA PŁATNOŚĆ */}
   {interpretation && (
