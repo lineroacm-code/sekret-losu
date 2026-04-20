@@ -547,7 +547,7 @@ onMouseLeave={(e) => {
   e.currentTarget.style.transform = "translateY(0)";
   e.currentTarget.style.boxShadow = "none";
 }}
-      }}
+      
     >
       <h3>Rozkład ogólny</h3>
       <p style={{ opacity: 0.7 }}>Ogólna energia i kierunek</p>
