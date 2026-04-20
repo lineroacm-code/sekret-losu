@@ -519,6 +519,7 @@ return (
         onClick={async () => {
           setReadingType("general");
           localStorage.setItem("readingType", "general");
+
           const deviceId = getDeviceId();
 
           const res = await fetch("/api/checkout", {
@@ -526,13 +527,33 @@ return (
             body: JSON.stringify({
               deviceId,
               type: "general",
-              // 🔥 PODMIENISZ NA SWÓJ LINK STRIPE
               priceId: "https://buy.stripe.com/28EfZi6ze5Y26pS2GCaZi04",
             }),
           });
 
           const data = await res.json();
           window.location.href = data.url;
+        }}
+        style={{
+          marginTop: 12,
+          padding: "10px 16px",
+          fontSize: 15,
+          background: "linear-gradient(135deg, #1a1a1a, #000)",
+          color: "#fff",
+          border: "1px solid rgba(255,215,0,0.3)",
+          borderRadius: 10,
+          cursor: "pointer",
+          transition: "all 0.25s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
+          e.currentTarget.style.border = "1px solid gold";
+          e.currentTarget.style.boxShadow = "0 0 20px rgba(255,215,0,0.3)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0px) scale(1)";
+          e.currentTarget.style.border = "1px solid rgba(255,215,0,0.3)";
+          e.currentTarget.style.boxShadow = "none";
         }}
       >
         Sprawdź – 10 PLN
@@ -543,27 +564,47 @@ return (
     <div style={{ width: 260, background: "#111", padding: 20, borderRadius: 16, border: "2px solid gold" }}>
       <h3>Co on/ona czuje</h3>
       <p style={{ opacity: 0.7 }}>Ukryte emocje i intencje</p>
-      <button
-        onClick={async () => {
-          setReadingType("love");
-          localStorage.setItem("readingType", "love"); // ✅ TU
-          const deviceId = getDeviceId();
+          <button
+      onClick={async () => {
+        setReadingType("love");
+        localStorage.setItem("readingType", "love");
 
-          const res = await fetch("/api/checkout", {
-            method: "POST",
-            body: JSON.stringify({
-              deviceId,
-              type: "love",
-              priceId: "https://buy.stripe.com/5kQ3cw7Di86a4hKa94aZi05",
-            }),
-          });
+        const deviceId = getDeviceId();
 
-          const data = await res.json();
-          window.location.href = data.url;
-        }}
-      >
-        Sprawdź – 10 PLN
-      </button>
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          body: JSON.stringify({
+            deviceId,
+            type: "love",
+            priceId: "https://buy.stripe.com/5kQ3cw7Di86a4hKa94aZi05",
+          }),
+        });
+
+        const data = await res.json();
+        window.location.href = data.url;
+      }}
+      style={{
+        marginTop: 12,
+        padding: "10px 16px",
+        fontSize: 15,
+        background: "linear-gradient(135deg, #1a1a1a, #000)",
+        color: "#fff",
+        border: "1px solid gold",
+        borderRadius: 10,
+        cursor: "pointer",
+        transition: "all 0.25s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
+        e.currentTarget.style.boxShadow = "0 0 25px rgba(255,215,0,0.5)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0px) scale(1)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+    >
+      Sprawdź – 10 PLN
+    </button>
     </div>
 
     {/* PYTANIE */}
@@ -571,31 +612,52 @@ return (
       <h3>Zadaj własne pytanie</h3>
       <p style={{ opacity: 0.7 }}>Pełna personalizacja</p>
       <button
-        onClick={async () => {
-          setReadingType("question");
-          localStorage.setItem("readingType", "question");
-          const deviceId = getDeviceId();
+      onClick={async () => {
+        setReadingType("question");
+        localStorage.setItem("readingType", "question");
 
-          const res = await fetch("/api/checkout", {
-            method: "POST",
-            body: JSON.stringify({
-              deviceId,
-              type: "question",
-              priceId: "https://buy.stripe.com/eVq3cw6ze4TY7tW4OKaZi06",
-            }),
-          });
+        const deviceId = getDeviceId();
 
-          const data = await res.json();
-          window.location.href = data.url;
-        }}
-      >
-        Zadaj pytanie – 20 PLN
-      </button>
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          body: JSON.stringify({
+            deviceId,
+            type: "question",
+            priceId: "https://buy.stripe.com/eVq3cw6ze4TY7tW4OKaZi06",
+          }),
+        });
+
+        const data = await res.json();
+        window.location.href = data.url;
+      }}
+      style={{
+        marginTop: 12,
+        padding: "10px 16px",
+        fontSize: 15,
+        background: "linear-gradient(135deg, #1a1a1a, #000)",
+        color: "#fff",
+        border: "1px solid rgba(255,215,0,0.3)",
+        borderRadius: 10,
+        cursor: "pointer",
+        transition: "all 0.25s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
+        e.currentTarget.style.border = "1px solid gold";
+        e.currentTarget.style.boxShadow = "0 0 20px rgba(255,215,0,0.3)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0px) scale(1)";
+        e.currentTarget.style.border = "1px solid rgba(255,215,0,0.3)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+    >
+      Zadaj pytanie – 20 PLN
+    </button>
     </div>
 
   </div>
 )}
-s
 
   {/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
 {paid && (justPaid || !interpretation) && (
