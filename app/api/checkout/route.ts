@@ -4,7 +4,20 @@ import { NextResponse } from "next/server";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
-  const { deviceId } = await req.json();
+  const { deviceId, type } = await req.json();
+
+  let price = 1000; // default 10 PLN
+  let name = "Tarot – Rozkład ogólny";
+
+  if (type === "love") {
+    price = 1000;
+    name = "Tarot – Rozkład miłosny";
+  }
+
+  if (type === "question") {
+    price = 2000;
+    name = "Tarot – Własne pytanie";
+  }
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card", "blik"],
@@ -14,9 +27,9 @@ export async function POST(req: Request) {
         price_data: {
           currency: "pln",
           product_data: {
-            name: "Tarot Reading",
+            name,
           },
-          unit_amount: 1000, // 10 PLN
+          unit_amount: price,
         },
         quantity: 1,
       },
@@ -25,6 +38,7 @@ export async function POST(req: Request) {
     cancel_url: `${process.env.NEXT_PUBLIC_URL}/tarot`,
     metadata: {
       deviceId,
+      type,
     },
   });
 
