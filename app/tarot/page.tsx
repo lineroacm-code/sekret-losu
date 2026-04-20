@@ -644,7 +644,15 @@ onMouseLeave={(e) => {
 
   {/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
 {paid && (justPaid || !interpretation) && (
-  <div>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 16,
+    }}
+  >
+
     {readingType === "question" && (
       <textarea
         placeholder="Wpisz swoje pytanie..."
@@ -653,28 +661,42 @@ onMouseLeave={(e) => {
         style={{
           width: "100%",
           maxWidth: 500,
-          height: 100,
-          marginBottom: 15,
-          padding: 10,
-          borderRadius: 10,
+          height: 120,
+          padding: 14,
+          borderRadius: 12,
+          background: "#111",
+          color: "#fff",
+          border: "1px solid rgba(255,215,0,0.3)",
+          outline: "none",
+          fontSize: 15,
+          resize: "none",
         }}
       />
     )}
 
-    <button
-      onClick={startReadingFlow}
-      style={{
-        padding: "12px 20px",
-        fontSize: 16,
-        background: "#fff",
-        color: "#000",
-        border: "none",
-        borderRadius: 8,
-        cursor: "pointer",
-      }}
-    >
-      Rozpocznij interpretację
-    </button>
+<button
+  onClick={startReadingFlow}
+  style={{
+    padding: "14px 24px",
+    fontSize: 16,
+    background: "linear-gradient(135deg, gold, #ffd700)",
+    color: "#000",
+    border: "none",
+    borderRadius: 10,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "scale(1.05)";
+    e.currentTarget.style.boxShadow = "0 0 20px rgba(255,215,0,0.4)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "scale(1)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  Rozpocznij interpretację
+</button>
 
     <div style={{ marginTop: 10, opacity: 0.6 }}>
       Kliknij, aby rozpocząć interpretację
@@ -683,20 +705,21 @@ onMouseLeave={(e) => {
 )}
 
   {/* 🔁 KOLEJNA PŁATNOŚĆ */}
-  {interpretation && (
-    <button
-      onClick={async () => {
-        const deviceId = getDeviceId();
+{interpretation && (
+  <button
+    onClick={() => {
+      if (readingType === "general") {
+        window.location.href = "https://buy.stripe.com/28EfZi6ze5Y26pS2GCaZi04";
+      }
 
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          body: JSON.stringify({ deviceId }),
-        });
+      if (readingType === "love") {
+        window.location.href = "https://buy.stripe.com/5kQ3cw7Di86a4hKa94aZi05";
+      }
 
-        const data = await res.json();
-
-        window.location.href = data.url;
-      }}
+      if (readingType === "question") {
+        window.location.href = "https://buy.stripe.com/eVq3cw6ze4TY7tW4OKaZi06";
+      }
+    }}
       style={{
         padding: "14px 28px",
         fontSize: 18,
@@ -707,7 +730,7 @@ onMouseLeave={(e) => {
         cursor: "pointer",
       }}
     >
-      Rozłóż ponownie – 10 PLN
+      Rozłóż ponownie
     </button>
   )}
 </div>

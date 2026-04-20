@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     let extraContext = "";
 
     if (type === "love") {
-      extraContext = `
+  extraContext = `
 KONTEKST: ROZKŁAD MIŁOSNY
 
 Skup się WYŁĄCZNIE na relacji między dwiema osobami.
@@ -39,26 +39,116 @@ Analizuj:
 Nie interpretuj ogólnie – wszystko ma dotyczyć tej relacji.
 
 Pokaż coś, czego użytkownik nie mówi wprost, ale czuje.
-`;
-    }
 
-    if (type === "question") {
-      extraContext = `
+---
+
+DODATKOWE ZASADY (BARDZO WAŻNE):
+
+1. Pisz tak, jakbyś mówił do jednej osoby – bez ogólników.
+
+2. Nie używaj „duchowego żargonu” – mów normalnie, po ludzku.
+
+3. W SYNTEZIE dodaj krótkie, emocjonalne podsumowanie relacji:
+- jasno: co tu się naprawdę dzieje
+- bez lania wody
+- bez symboliki
+
+4. OSTATNIE 2–3 ZDANIA SYNTEZY:
+mają być bardzo ludzkie i bezpośrednie, np.:
+- „on/ona nie jest tu w pełni”
+- „ta relacja ma potencjał, ale tylko jeśli…”
+- „to bardziej trzyma się siłą przyzwyczajenia niż uczuć”
+
+5. To ma brzmieć jak szczera rozmowa, nie jak opis kart.
+`;
+}
+
+if (type === "question") {
+  extraContext = `
 KONTEKST: KONKRETNE PYTANIE
 
 Pytanie użytkownika:
 "${question}"
 
-CAŁA interpretacja musi być podporządkowana temu pytaniu.
+---
 
-Każda część (przeszłość, teraźniejszość, przyszłość) ma odnosić się do pytania.
+NAJWAŻNIEJSZE:
 
-Nie uciekaj w ogólne znaczenia kart.
+To nie jest ogólny rozkład.
+To jest odpowiedź na KONKRETNE pytanie.
+
+Każde zdanie ma być podporządkowane temu pytaniu.
+
+---
+
+ZASADY:
+
+1. ODPOWIADAJ NA PYTANIE, NIE OPISUJ KART
+Nie pisz ogólnych znaczeń.
 Nie analizuj „dla wszystkich”.
 
-Odpowiadasz tej jednej osobie, na jej konkretną sytuację.
+Każda część ma wnosić coś do odpowiedzi.
+
+---
+
+2. KONKRET ZAMIAST OGÓLNIKÓW
+Zamiast:
+- „to zależy”
+- „może być różnie”
+
+mów:
+- co tu naprawdę się dzieje
+- jaka jest dynamika sytuacji
+- co z tego wynika
+
+---
+
+3. CZYTAJ MIĘDZY WIERSZAMI
+Zastanów się:
+- dlaczego ktoś zadaje to pytanie?
+- czego się boi?
+- czego nie mówi wprost?
+
+Uwzględnij to w interpretacji.
+
+---
+
+4. SYNTEZA = ODPOWIEDŹ
+
+Sekcja "synthesis" ma być:
+👉 bezpośrednią odpowiedzią na pytanie
+
+Nie podsumowaniem kart — tylko odpowiedzią.
+
+---
+
+5. ZAKOŃCZENIE (BARDZO WAŻNE)
+
+Ostatnie 2–3 zdania:
+- konkretna konkluzja
+- jasno: tak / nie / jeśli / pod warunkiem
+- bez symboliki
+- bez ezoterycznego języka
+
+Przykłady stylu:
+- „to się nie wydarzy, jeśli nic nie zmienisz”
+- „to ma sens, ale tylko jeśli druga strona też się zaangażuje”
+- „to nie jest stabilne, nawet jeśli teraz tak wygląda”
+
+---
+
+6. JĘZYK
+
+- pisz jak do jednej osoby
+- naturalnie
+- bez „energetycznego bełkotu”
+- bez lania wody
+
+---
+
+To ma brzmieć jak trafna odpowiedź, nie interpretacja kart.
 `;
-    }
+}
 
     const prompt = `
 Jesteś ekspertem od tarota pracującym na poziomie psychologicznym, archetypowym i symbolicznym.
