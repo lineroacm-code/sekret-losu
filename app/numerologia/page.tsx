@@ -52,7 +52,7 @@ const calculate = async () => {
   try {
     setIsLoading(true);
 
-    const res = await fetch("/api/numerologia", {
+    const res = await fetch("/api/checkout-numerologia", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -559,7 +559,17 @@ onMouseLeave={(e) => {
         backdropFilter: "blur(12px)",
       }}
     >
-      {[
+{(
+  readingType === "individual"
+    ? [
+        ["To kim jesteś", result.identity],
+        ["Jak działasz", result.psychology],
+        ["Relacje", result.relationships],
+        ["Cienie", result.shadow],
+        ["Konflikt wewnętrzny", result.conflict],
+        ["Twój potencjał", result.potential],
+      ]
+    : [
         ["Osoba A", result.personA],
         ["Osoba B", result.personB],
         ["Dopasowanie", result.compatibility],
@@ -567,8 +577,9 @@ onMouseLeave={(e) => {
         ["Przyciąganie", result.attraction],
         ["Wzorzec relacji", result.relationship_pattern],
         ["Potencjał", result.long_term],
-      ].map(([title, text], i) => (
-        <div key={i} style={{ marginBottom: 25 }}>
+      ]
+).map(([title, text], i) => (
+  <div key={i} style={{ marginBottom: 25 }}>
           <div
             style={{
               color: "gold",

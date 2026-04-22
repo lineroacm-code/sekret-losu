@@ -414,17 +414,17 @@ FORMAT:
         };
       }
 
-      if (type === "individual") {
-        parsed = {
-          identity: parsed.identity || "Brak danych",
-          psychology: parsed.psychology || "Brak danych",
-          relationships: parsed.relationships || "Brak danych",
-          shadow: parsed.shadow || "Brak danych",
-          potential: parsed.potential || "Brak danych",
-          conflict: parsed.conflict || "Brak danych",
-          summary: parsed.summary || "Brak podsumowania",
-        };
-      }
+if (type === "individual") {
+  parsed = {
+    identity: parsed.identity || "Brak danych",
+    psychology: parsed.psychology || "Brak danych",
+    relationships: parsed.relationships || "Brak danych",
+    shadow: parsed.shadow || "Brak danych",
+    conflict: parsed.conflict || "Brak danych",
+    potential: parsed.potential || "Brak danych",
+    summary: parsed.summary || "Brak podsumowania",
+  };
+}
 
     } catch (e) {
       return NextResponse.json(
