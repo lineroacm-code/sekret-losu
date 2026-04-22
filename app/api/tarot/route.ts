@@ -249,10 +249,16 @@ Jest wglądem w proces i kierunek zmian.
 Twoim celem jest stworzenie odpowiedzi, która brzmi jak coś bardzo trafnego i osobistego.
 `;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4.1-mini",
-      messages: [{ role: "user", content: prompt }],
-    });
+const model =
+  type === "question"
+    ? "gpt-4.1"
+    : "gpt-4.1-mini";
+
+const response = await openai.chat.completions.create({
+  model,
+  messages: [{ role: "user", content: prompt }],
+  response_format: { type: "json_object" },
+});
 
     const text = response.choices[0].message.content || "";
 

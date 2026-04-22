@@ -55,12 +55,33 @@ function calculateLifePath(date: string) {
 
 export async function POST(req: Request) {
   try {
-    const { dateA, dateB } = await req.json();
+    const { type, dateA, dateB } = await req.json();
+
+    // ✅ NAJPIERW TYPE
+    if (type !== "compatibility" && type !== "individual") {
+      return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+    }
+
+    // ✅ POTEM DATY
+    if (!dateA) {
+      return NextResponse.json({ error: "Brak daty A" }, { status: 400 });
+    }
+
+    if (type === "compatibility" && !dateB) {
+      return NextResponse.json({ error: "Brak daty B" }, { status: 400 });
+    }
 
     const numerologyA = calculateLifePath(dateA);
-    const numerologyB = calculateLifePath(dateB);
 
-    const prompt = `
+    const numerologyB =
+      type === "compatibility"
+        ? calculateLifePath(dateB)
+        : { main: 0, master: null };
+
+    let prompt = "";
+
+    if (type === "compatibility") {
+      prompt = `
 
 Jesteś ekspertem w zakresie numerologii psychologicznej i partnerskiej.
 
@@ -196,9 +217,6 @@ MAPOWANIE:
 ---
 ZWRÓĆ WYŁĄCZNIE JSON (bez żadnego tekstu poza JSON).
 
-Najpierw wypełnij strukturę JSON wszystkimi polami.
-Każde pole musi zawierać konkretną analizę (minimum kilka zdań).
-Nie zwracaj pustych pól.
 FORMAT ODPOWIEDZI (JSON):
 
 {
@@ -213,58 +231,202 @@ FORMAT ODPOWIEDZI (JSON):
   "summary": "mocne podsumowanie"
 }
 `;
-
-const response = await openai.chat.completions.create({
-  model: "gpt-4o",
-  messages: [
-    {
-      role: "system",
-      content: "Zwracaj wyłącznie poprawny JSON. Bez tekstu poza JSON."
-    },
-    {
-      role: "user",
-      content: prompt
     }
-  ],
-  temperature: 0.7,
-  max_tokens: 2000,
-});
 
-let raw = response.choices?.[0]?.message?.content;
+    if (type === "individual") {
+      prompt = `
 
-if (!raw) {
-  console.error("❌ EMPTY AI RESPONSE");
-  return NextResponse.json(
-    { error: "Empty AI response" },
-    { status: 500 }
-  );
+Jesteś ekspertem w zakresie numerologii psychologicznej i analizy osobowości.
+
+Twoim zadaniem jest stworzenie pogłębionej, logicznej i bardzo trafnej analizy jednej osoby na podstawie jej daty urodzenia.
+
+Analiza NIE może być ogólna ani uniwersalna — musi wynikać bezpośrednio z konkretnych wartości liczbowych.
+
+---
+
+DANE NUMEROLOGICZNE (OBLICZONE – NIE PRZELICZAJ):
+
+Osoba:
+- Data urodzenia: ${dateA}
+- Droga życia: ${numerologyA.main}
+- Potencjał mistrzowski: ${numerologyA.master ?? "brak"}
+
+---
+
+KROK 1: TOŻSAMOŚĆ I RDZEŃ OSOBOWOŚCI
+
+Opisz:
+
+- kim jest ta osoba na głębokim poziomie
+- jaka energia ją definiuje
+- jak jest odbierana przez innych
+- co ją wyróżnia
+
+To ma dawać efekt „to dokładnie ja”.
+
+---
+
+KROK 2: PSYCHOLOGIA I SPOSÓB MYŚLENIA
+
+Przeanalizuj:
+
+- sposób podejmowania decyzji
+- relację z emocjami
+- sposób reagowania na stres
+- czy działa impulsywnie czy strategicznie
+
+---
+
+KROK 3: RELACJE I WIĘZI
+
+Opisz:
+
+- jak funkcjonuje w relacjach
+- czego potrzebuje od innych
+- jak buduje więź
+- co najczęściej psuje jej relacje
+
+---
+
+KROK 4: CIEŃ I SABOTAŻ
+
+Przeanalizuj:
+
+- słabe strony tej liczby
+- schematy, które ją ograniczają
+- momenty, w których sama sobie szkodzi
+- destrukcyjne wzorce
+
+To ma być trafne i konkretne.
+
+---
+
+KROK 5: POTENCJAŁ I KIERUNEK ŻYCIA
+
+Odpowiedz:
+
+- do czego ta osoba jest naturalnie predysponowana
+- gdzie może osiągnąć najwięcej
+- co powinna rozwijać
+- co ignoruje, a jest kluczowe
+
+---
+
+KROK 6: WEWNĘTRZNY KONFLIKT
+
+Opisz:
+
+- sprzeczności w tej osobie
+- napięcia wewnętrzne
+- czego chce vs czego się boi
+
+---
+
+KROK 7: SYNTEZA
+
+Krótka, mocna konkluzja:
+
+- kim naprawdę jest ta osoba
+- jaki jest jej główny wzorzec
+- jaki ma kierunek
+
+---
+
+STYL:
+
+- konkretny, psychologiczny
+- wypowiedź ma być w pełni w języku polskim
+- bez ogólników
+- bez „możliwe że”
+- język naturalny i trafny
+- każda sekcja ma być rozwinięta (minimum kilka zdań)
+- buduj rozbudowane zdania, a nie krótkie frazy
+- tekst ma mieć wartość, za którą ktoś realnie płaci
+
+---
+
+ZWRÓĆ WYŁĄCZNIE JSON (bez żadnego tekstu poza JSON).
+
+FORMAT:
+
+{
+  "identity": "tożsamość i rdzeń osobowości",
+  "psychology": "sposób myślenia i emocje",
+  "relationships": "relacje i więzi",
+  "shadow": "cień i sabotaż",
+  "potential": "potencjał i kierunek życia",
+  "conflict": "wewnętrzne napięcia",
+  "summary": "mocne podsumowanie"
 }
 
-// 🔥 CLEAN JSON
-raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+`;
+    }
 
-console.log("RAW CLEAN:", raw);
+    // ✅ KLUCZOWE — GLOBALNIE
+    if (!prompt) {
+      return NextResponse.json({ error: "Brak promptu" }, { status: 400 });
+    }
 
-let parsed;
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: "Zwracaj wyłącznie poprawny JSON. Bez tekstu poza JSON."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 2000,
+      response_format: { type: "json_object" },
+    });
 
-try {
-  parsed = JSON.parse(raw);
-    
-      parsed = {
-  label: parsed.label || "Brak danych",
-  personA: parsed.personA || "Brak analizy",
-  personB: parsed.personB || "Brak analizy",
-  compatibility: parsed.compatibility || "Brak danych",
-  tension: parsed.tension || "Brak danych",
-  attraction: parsed.attraction || "Brak danych",
-  relationship_pattern: parsed.relationship_pattern || "Brak danych",
-  long_term: parsed.long_term || "Brak danych",
-  summary: parsed.summary || "Brak podsumowania",
-  };
-    
+    let raw = response.choices?.[0]?.message?.content;
+
+    if (!raw) {
+      return NextResponse.json(
+        { error: "Empty AI response" },
+        { status: 500 }
+      );
+    }
+
+    raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+
+    let parsed;
+
+    try {
+      parsed = JSON.parse(raw);
+
+      if (type === "compatibility") {
+        parsed = {
+          label: parsed.label || "Brak danych",
+          personA: parsed.personA || "Brak analizy",
+          personB: parsed.personB || "Brak analizy",
+          compatibility: parsed.compatibility || "Brak danych",
+          tension: parsed.tension || "Brak danych",
+          attraction: parsed.attraction || "Brak danych",
+          relationship_pattern: parsed.relationship_pattern || "Brak danych",
+          long_term: parsed.long_term || "Brak danych",
+          summary: parsed.summary || "Brak podsumowania",
+        };
+      }
+
+      if (type === "individual") {
+        parsed = {
+          identity: parsed.identity || "Brak danych",
+          psychology: parsed.psychology || "Brak danych",
+          relationships: parsed.relationships || "Brak danych",
+          shadow: parsed.shadow || "Brak danych",
+          potential: parsed.potential || "Brak danych",
+          conflict: parsed.conflict || "Brak danych",
+          summary: parsed.summary || "Brak podsumowania",
+        };
+      }
+
     } catch (e) {
-      console.error("❌ JSON PARSE ERROR:", raw);
-
       return NextResponse.json(
         { error: "AI nie zwróciło poprawnego JSON" },
         { status: 500 }
@@ -274,8 +436,6 @@ try {
     return NextResponse.json(parsed);
 
   } catch (error) {
-    console.error("❌ API ERROR:", error);
-
     return NextResponse.json(
       { error: "Server error" },
       { status: 500 }

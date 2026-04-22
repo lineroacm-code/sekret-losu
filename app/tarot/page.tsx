@@ -519,14 +519,16 @@ return (
 
         const deviceId = getDeviceId();
 
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          body: JSON.stringify({
-            deviceId,
-            type: "general",
-            priceId: "https://buy.stripe.com/28EfZi6ze5Y26pS2GCaZi04",
-          }),
-        });
+const res = await fetch("/api/checkout", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    deviceId,
+    type: "general",
+  }),
+});
 
         const data = await res.json();
         window.location.href = data.url;
@@ -562,14 +564,16 @@ onMouseLeave={(e) => {
 
         const deviceId = getDeviceId();
 
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          body: JSON.stringify({
-            deviceId,
-            type: "love",
-            priceId: "https://buy.stripe.com/5kQ3cw7Di86a4hKa94aZi05",
-          }),
-        });
+const res = await fetch("/api/checkout", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    deviceId,
+    type: "general",
+  }),
+});
 
         const data = await res.json();
         window.location.href = data.url;
@@ -605,14 +609,16 @@ onMouseLeave={(e) => {
 
         const deviceId = getDeviceId();
 
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          body: JSON.stringify({
-            deviceId,
-            type: "question",
-            priceId: "https://buy.stripe.com/eVq3cw6ze4TY7tW4OKaZi06",
-          }),
-        });
+ const res = await fetch("/api/checkout", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    deviceId,
+    type: "general",
+  }),
+});
 
         const data = await res.json();
         window.location.href = data.url;
@@ -707,19 +713,23 @@ onMouseLeave={(e) => {
   {/* 🔁 KOLEJNA PŁATNOŚĆ */}
 {interpretation && (
   <button
-    onClick={() => {
-      if (readingType === "general") {
-        window.location.href = "https://buy.stripe.com/28EfZi6ze5Y26pS2GCaZi04";
-      }
+onClick={async () => {
+  const deviceId = getDeviceId();
 
-      if (readingType === "love") {
-        window.location.href = "https://buy.stripe.com/5kQ3cw7Di86a4hKa94aZi05";
-      }
+  const res = await fetch("/api/checkout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      deviceId,
+      type: readingType,
+    }),
+  });
 
-      if (readingType === "question") {
-        window.location.href = "https://buy.stripe.com/eVq3cw6ze4TY7tW4OKaZi06";
-      }
-    }}
+  const data = await res.json();
+  window.location.href = data.url;
+}}
       style={{
         padding: "14px 28px",
         fontSize: 18,

@@ -3,21 +3,26 @@ import { NextResponse } from "next/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function POST() {
+export async function POST(req: Request) {
   try {
+    const { type } = await req.json();
+
+   if (type !== "compatibility" && type !== "individual") {
+  return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+} 
+
+    const priceId =
+      type === "compatibility"
+        ? "price_1TOxG3JkGpeXxxwVjbsoCvnU"
+        : "price_1TOxESJkGpeXxxwVVcQ6bh97";
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "blik"],
       mode: "payment",
 
       line_items: [
         {
-          price_data: {
-            currency: "pln",
-            product_data: {
-              name: "Analiza numerologiczna",
-            },
-            unit_amount: 1000,
-          },
+          price: priceId,
           quantity: 1,
         },
       ],

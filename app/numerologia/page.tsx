@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 export default function Numerologia() {
   const [paid, setPaid] = useState(false);
+  const [readingType, setReadingType] = useState<"compatibility" | "individual" | null>(null);
   const [heroVisible, setHeroVisible] = useState(false);
   const [date1, setDate1] = useState("");
   const [date2, setDate2] = useState("");
@@ -30,12 +31,22 @@ export default function Numerologia() {
     fontSize: 14,
     cursor: "pointer",
   };
-const calculate = async () => {
-  setShowResult(false); // reset animacji
 
-  if (!day1 || !month1 || !year1 || !day2 || !month2 || !year2) {
-    alert("Uzupełnij obie daty");
-    return;
+const calculate = async () => {
+  setShowResult(false);
+
+  if (readingType === "compatibility") {
+    if (!day1 || !month1 || !year1 || !day2 || !month2 || !year2) {
+      alert("Uzupełnij obie daty");
+      return;
+    }
+  }
+
+  if (readingType === "individual") {
+    if (!day1 || !month1 || !year1) {
+      alert("Uzupełnij datę");
+      return;
+    }
   }
 
   try {
@@ -47,6 +58,7 @@ const calculate = async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        type: readingType,
         dateA: fullDateA,
         dateB: fullDateB,
       }),
@@ -55,8 +67,7 @@ const calculate = async () => {
     const data = await res.json();
 
     setResult(data);
-    setPaid(false);
-
+    
     setTimeout(() => {
       setShowResult(true);
     }, 100);
@@ -69,13 +80,20 @@ const calculate = async () => {
 };
 
 useEffect(() => {
+  const type = localStorage.getItem("readingType");
+  if (type) setReadingType(type as any);
+}, []);
+
+useEffect(() => {
   const params = new URLSearchParams(window.location.search);
   const sessionId = params.get("session_id");
 
 if (sessionId) {
   setPaid(true);
-  setResult(null); // 🔥 KLUCZ
+  setResult(null);
 
+  const savedType = localStorage.getItem("readingType");
+  if (savedType) setReadingType(savedType as any);
 
   window.history.replaceState({}, "", "/numerologia");
 }
@@ -224,84 +242,97 @@ if (sessionId) {
       {/* CTA */}
 <div style={{ marginTop: 40 }}>
 
-  {!paid && !result ? (
-    // 🔥 PIERWSZA PŁATNOŚĆ
-    <div
-      style={{
-        maxWidth: 700,
-        textAlign: "center",
-        margin: "0 auto 30px auto",
-      }}
-    >
-<div style={{ lineHeight: 1.8, fontSize: 17, opacity: 0.85, marginBottom: 30 }}>
+{!paid && !result ? (
 
-  <div style={{ marginBottom: 15, fontSize: 20, color: "gold" }}>
-    To nie jest przypadek, że na siebie trafiliście
-  </div>
+  <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
 
-<div style={{ marginBottom: 20, opacity: 0.7 }}>
-  Twoja data urodzenia wpływa na to,
-  jak kochasz i budujesz relacje.
-</div>
+    {/* DOPASOWANIE */}
+<div
+onClick={async () => {
+  setReadingType("compatibility");
+  localStorage.setItem("readingType", "compatibility");
 
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: 8,
-      marginBottom: 20,
-    }}
-  >
-<div>• czy to ma sens</div>
-<div>• czy to działa</div>
-<div>• czy to ma przyszłość</div>
-  </div>
+  const res = await fetch("/api/checkout-numerologia", {
+    method: "POST",
+    body: JSON.stringify({ type: "compatibility" }), // ✅ NA SZTYWNO
+  });
 
-  <div style={{ fontWeight: 500, color: "#fff" }}>
-    Nie ogólnie. Konkretnie.
-  </div>
-
-</div>
-
- <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 30 }}>
-  <button
-    onClick={async () => {
-      const res = await fetch("/api/checkout-numerologia", {
-        method: "POST",
-      });
-
-      const data = await res.json();
-      window.location.href = data.url;
-    }}
-    style={{
-      padding: "14px 28px",
-      fontSize: 18,
-      background: "linear-gradient(135deg, gold, #ffd700)",
-      color: "#000",
-      border: "none",
-      borderRadius: 12,
-      cursor: "pointer",
-      transition: "all 0.25s ease",
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.transform = "scale(1.05)";
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.transform = "scale(1)";
-    }}
-  >
-    Odkryj, co naprawdę Was łączy – 10 zł
-  </button>
-
-  <div style={{ marginTop: 10, opacity: 0.6, fontSize: 14, textAlign: "center" }}>
-    Większość osób nie spodziewa się, jak trafne to jest
-  </div>
-</div>
+  const data = await res.json();
+  window.location.href = data.url;
+}}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    border: "1px solid rgba(255,215,0,0.15)",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-6px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.25)";
+    e.currentTarget.style.border = "1px solid rgba(255,215,0,0.4)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+    e.currentTarget.style.border = "1px solid rgba(255,215,0,0.15)";
+  }}
+>
+      <h3>Dopasowanie dwóch osób</h3>
+      <p style={{ opacity: 0.7 }}>Relacja i przyszłość</p>
+      <div style={{ marginTop: 10, color: "gold" }}>10 PLN</div>
     </div>
-  ) : paid && !result ? (
+
+    {/* INDYWIDUALNA */}
+<div
+onClick={async () => {
+  setReadingType("individual");
+  localStorage.setItem("readingType", "individual");
+
+  const res = await fetch("/api/checkout-numerologia", {
+    method: "POST",
+    body: JSON.stringify({ type: "individual" }), // ✅ NA SZTYWNO
+  });
+
+  const data = await res.json();
+  window.location.href = data.url;
+}}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    border: "1px solid rgba(255,215,0,0.15)",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-6px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.25)";
+    e.currentTarget.style.border = "1px solid rgba(255,215,0,0.4)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+    e.currentTarget.style.border = "1px solid rgba(255,215,0,0.15)";
+  }}
+>
+      <h3>Twoja indywidualna analiza</h3>
+      <p style={{ opacity: 0.7 }}>Twoja energia, charakter i przeznaczenie</p>
+      <div style={{ marginTop: 10, color: "gold" }}>10 PLN</div>
+    </div>
+
+  </div>
+
+) : paid && !result ? (
     // 🔥 FORMULARZ
     <div style={{ marginTop: 20 }}>
+
+{readingType === "compatibility" && (
+  <>
+
 <div style={{ textAlign: "center", marginBottom: 20 }}>
   <div style={{ fontSize: 18, marginBottom: 5 }}>
     Wprowadź daty urodzenia
@@ -392,7 +423,41 @@ onMouseLeave={(e) => {
           Zobacz, co Was łączy
         </button>
       </div>
+    
+  </>
+)}
+
+{readingType === "individual" && (
+  <div style={{ textAlign: "center", marginTop: 20 }}>
+
+    <div style={{ marginBottom: 10 }}>Twoja data urodzenia</div>
+
+    <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+      <select value={day1} onChange={(e) => setDay1(e.target.value)} style={selectStyle}>
+        <option value="">Dzień</option>
+        {days.map((d) => <option key={d}>{d}</option>)}
+      </select>
+
+      <select value={month1} onChange={(e) => setMonth1(e.target.value)} style={selectStyle}>
+        <option value="">Miesiąc</option>
+        {months.map((m) => <option key={m}>{m}</option>)}
+      </select>
+
+      <select value={year1} onChange={(e) => setYear1(e.target.value)} style={selectStyle}>
+        <option value="">Rok</option>
+        {years.map((y) => <option key={y}>{y}</option>)}
+      </select>
     </div>
+
+    <div style={{ marginTop: 20 }}>
+      <button onClick={calculate}>
+        Sprawdź
+      </button>
+    </div>
+
+  </div>
+)}
+ </div>
   ) : null}
 </div>
 
@@ -442,7 +507,7 @@ onMouseLeave={(e) => {
 )}
 
 {/* WYNIK */}
-{result && (
+{result && paid && (
   
   <div
     style={{
