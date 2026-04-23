@@ -17,11 +17,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ MAPA PRICE ID (USTAW SWOJE!)
+    // ✅ MAPA PRICE ID (upewnij się że to price_ a nie prod_)
     const priceMap: Record<string, string> = {
-      general: "price_1TJhzWJkGpeXxxwVUMmw54Va",   // 🔁 podmień
-      love: "price_1TOGYmJkGpeXxxwV27I9rYso",      // 🔁 podmień
-      question: "price_1TOGhPJkGpeXxxwV4wx4o6EI",  // 🔁 podmień
+      general: "price_1TJhzWJkGpeXxxwVUMmw54Va",
+      love: "price_1TOGYmJkGpeXxxwV27I9rYso",
+      question: "price_1TOGhPJkGpeXxxwV4wx4o6EI",
     };
 
     const priceId = priceMap[type];
@@ -33,12 +33,15 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("CHECKOUT TYPE:", type, "PRICE:", priceId);
+    // 🔍 DEBUG (bardzo ważne teraz)
+    console.log("👉 TYPE:", type);
+    console.log("👉 PRICE ID:", priceId);
 
     // ✅ STRIPE SESSION
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card", "blik"],
       mode: "payment",
+
+      payment_method_types: ["card", "blik"],
 
       line_items: [
         {
@@ -59,7 +62,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: session.url });
 
   } catch (err: any) {
-    console.error("STRIPE ERROR:", err);
+    console.error("❌ STRIPE ERROR:", err);
 
     return NextResponse.json(
       { error: "Stripe error" },
