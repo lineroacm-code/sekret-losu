@@ -1,7 +1,9 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2024-06-20",
+});
 
 export async function POST(req: Request) {
   try {
@@ -15,31 +17,32 @@ export async function POST(req: Request) {
       );
     }
 
-    let price = 1000;
-    let name = "Tarot – Rozkład ogólny";
+    // ✅ MAPA PRICE ID (USTAW SWOJE!)
+    const priceMap: Record<string, string> = {
+      general: "price_1TJhzWJkGpeXxxwVUMmw54Va",   // 🔁 podmień
+      love: "price_1TOGYmJkGpeXxxwV27I9rYso",      // 🔁 podmień
+      question: "price_1TOGhPJkGpeXxxwV4wx4o6EI",  // 🔁 podmień
+    };
 
-    if (type === "love") {
-      name = "Tarot – Rozkład miłosny";
+    const priceId = priceMap[type];
+
+    if (!priceId) {
+      return NextResponse.json(
+        { error: "Price not found" },
+        { status: 400 }
+      );
     }
 
-    if (type === "question") {
-      price = 2000;
-      name = "Tarot – Własne pytanie";
-    }
+    console.log("CHECKOUT TYPE:", type, "PRICE:", priceId);
 
+    // ✅ STRIPE SESSION
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "blik"],
       mode: "payment",
 
       line_items: [
         {
-          price_data: {
-            currency: "pln",
-            product_data: {
-              name,
-            },
-            unit_amount: price,
-          },
+          price: priceId,
           quantity: 1,
         },
       ],
