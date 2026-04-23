@@ -221,6 +221,29 @@ const drawCards = () => {
   "Interpretacja układu...",
 ];
 
+// 🔥 DODAJ TO TUTAJ (między loadingTexts a return)
+
+const handleCheckout = async (type: "general" | "love" | "question") => {
+  setReadingType(type);
+  localStorage.setItem("readingType", type);
+
+  const deviceId = getDeviceId();
+
+  const res = await fetch("/api/checkout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      deviceId,
+      type,
+    }),
+  });
+
+  const data = await res.json();
+  window.location.href = data.url;
+};
+
 return (
   <main
     style={{
@@ -556,99 +579,60 @@ onMouseLeave={(e) => {
       <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
     </div>
 
-    {/* MIŁOSNY (highlight) */}
-    <div
-      onClick={async () => {
-        setReadingType("love");
-        localStorage.setItem("readingType", "love");
+{/* MIŁOSNY (highlight) */}
+<div
+  onClick={() => handleCheckout("love")}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    border: "1px solid rgba(255,215,0,0.2)",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  <h3>Rozkład miłosny</h3>
+  <p style={{ opacity: 0.7 }}>Ukryte emocje i intencje</p>
+  <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
+</div>
 
-        const deviceId = getDeviceId();
-
-const res = await fetch("/api/checkout", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    deviceId,
-    type: "general",
-  }),
-});
-
-        const data = await res.json();
-        window.location.href = data.url;
-      }}
-      style={{
-        width: 260,
-        background: "#111",
-        padding: 20,
-        borderRadius: 16,
-        cursor: "pointer",
-        transition: "all 0.25s ease",
-        border: "1px solid rgba(255,215,0,0.2)", // 🔥 tylko tutaj
-      }}
-onMouseEnter={(e) => {
-  e.currentTarget.style.transform = "translateY(-5px)";
-  e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
-}}
-onMouseLeave={(e) => {
-  e.currentTarget.style.transform = "translateY(0)";
-  e.currentTarget.style.boxShadow = "none";
-}}
-    >
-      <h3>Rozkład miłosny</h3>
-      <p style={{ opacity: 0.7 }}>Ukryte emocje i intencje</p>
-      <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
-    </div>
-
-    {/* PYTANIE */}
-    <div
-      onClick={async () => {
-        setReadingType("question");
-        localStorage.setItem("readingType", "question");
-
-        const deviceId = getDeviceId();
-
- const res = await fetch("/api/checkout", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    deviceId,
-    type: "general",
-  }),
-});
-
-        const data = await res.json();
-        window.location.href = data.url;
-      }}
-      style={{
-        width: 260,
-        background: "#111",
-        padding: 20,
-        borderRadius: 16,
-        cursor: "pointer",
-        transition: "all 0.25s ease",
-      }}
-onMouseEnter={(e) => {
-  e.currentTarget.style.transform = "translateY(-5px)";
-  e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
-}}
-onMouseLeave={(e) => {
-  e.currentTarget.style.transform = "translateY(0)";
-  e.currentTarget.style.boxShadow = "none";
-}}
-    >
-      <h3>Własne pytanie</h3>
-      <p style={{ opacity: 0.7 }}>Pełna personalizacja</p>
-      <div style={{ marginTop: 10, color: "gold" }}>Zadaj pytanie – 20 PLN</div>
-    </div>
-
-  </div>
+{/* PYTANIE */}
+<div
+  onClick={() => handleCheckout("question")}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  <h3>Własne pytanie</h3>
+  <p style={{ opacity: 0.7 }}>Pełna personalizacja</p>
+  <div style={{ marginTop: 10, color: "gold" }}>Zadaj pytanie – 20 PLN</div>
+</div>
+</div>
 )}
 
-  {/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
+{/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
 {paid && (justPaid || !interpretation) && (
   <div
     style={{
@@ -710,26 +694,29 @@ onMouseLeave={(e) => {
   </div>
 )}
 
-  {/* 🔁 KOLEJNA PŁATNOŚĆ */}
+{/* 🔁 KOLEJNA PŁATNOŚĆ */}
 {interpretation && (
   <button
-onClick={async () => {
-  const deviceId = getDeviceId();
+    onClick={async () => {
+      const deviceId = getDeviceId();
 
-  const res = await fetch("/api/checkout", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      deviceId,
-      type: readingType,
-    }),
-  });
+      const type =
+        readingType || localStorage.getItem("readingType") || "general";
 
-  const data = await res.json();
-  window.location.href = data.url;
-}}
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          deviceId,
+          type,
+        }),
+      });
+
+      const data = await res.json();
+      window.location.href = data.url;
+    }}
       style={{
         padding: "14px 28px",
         fontSize: 18,
