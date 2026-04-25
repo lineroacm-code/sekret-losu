@@ -27,18 +27,17 @@ export async function POST(req: Request) {
   extraContext = `
 KONTEKST: ROZKŁAD MIŁOSNY
 
-Skup się WYŁĄCZNIE na relacji między dwiema osobami.
+Skup się na sferze uczuciowej użytkownika, ale NIE zakładaj, że jest w konkretnej relacji.
 
 Analizuj:
-- uczucia (jawne i ukryte)
-- intencje
-- dynamikę relacji
-- kto się wycofuje / kto się angażuje
+- aktualną energię miłosną wokół użytkownika
+- uczucia (świadome i ukryte)
+- możliwe intencje innych osób (jeśli się pojawiają)
+- dynamikę: otwieranie się vs wycofanie
 - napięcie emocjonalne
+- potencjalne nowe znajomości lub powroty z przeszłości
 
-Nie interpretuj ogólnie – wszystko ma dotyczyć tej relacji.
-
-Pokaż coś, czego użytkownik nie mówi wprost, ale czuje.
+Jeśli pojawia się druga osoba, opisuj ją ogólnie (np. „ktoś”, „pewna osoba”), bez zakładania konkretnej relacji.
 
 ---
 
@@ -48,18 +47,25 @@ DODATKOWE ZASADY (BARDZO WAŻNE):
 
 2. Nie używaj „duchowego żargonu” – mów normalnie, po ludzku.
 
-3. W SYNTEZIE dodaj krótkie, emocjonalne podsumowanie relacji:
-- jasno: co tu się naprawdę dzieje
+3. Jeśli to pasuje, używaj warunków:
+- „jeśli jesteś w relacji…”
+- „jeśli jesteś singlem…”
+ALE tylko naturalnie, nie na siłę.
+
+4. Pokazuj rzeczy, których użytkownik nie mówi wprost, ale może czuć.
+
+5. W SYNTEZIE dodaj krótkie, emocjonalne podsumowanie:
+- jasno: co się naprawdę dzieje w jego sferze uczuciowej
 - bez lania wody
 - bez symboliki
 
-4. OSTATNIE 2–3 ZDANIA SYNTEZY:
+6. OSTATNIE 2–3 ZDANIA SYNTEZY:
 mają być bardzo ludzkie i bezpośrednie, np.:
-- „on/ona nie jest tu w pełni”
-- „ta relacja ma potencjał, ale tylko jeśli…”
-- „to bardziej trzyma się siłą przyzwyczajenia niż uczuć”
+- „coś tu się zaczyna zmieniać”
+- „trzymasz się czegoś, co już nie daje tyle co kiedyś”
+- „ktoś może się pojawić, ale wszystko zależy od Twojej decyzji”
 
-5. To ma brzmieć jak szczera rozmowa, nie jak opis kart.
+7. To ma brzmieć jak szczera rozmowa, nie jak opis kart.
 `;
 }
 
