@@ -174,7 +174,7 @@ useEffect(() => {
     try {
       const saved = await getCurrentReading();
 
-      if (saved) {
+      if (saved && !paid && !justPaid) {
         setCards(saved.cards);
         setInterpretation(saved.interpretation);
         setHasDrawn(true);
@@ -236,6 +236,20 @@ const drawCards = () => {
   "Interpretacja układu...",
 ];
 
+const resetToOffer = async () => {
+  setInterpretation(null);
+  setDrawn([]);
+  setCards([]);
+  setHasDrawn(false);
+  setRevealed([false, false, false]);
+  setPaid(false);
+  setJustPaid(false);
+
+  localStorage.removeItem("paid");
+  localStorage.removeItem("readingType");
+
+  await clearCurrentReading();
+};
 
 const getSectionTitles = (type: string | null) => {
   if (type === "thinking") {
@@ -899,40 +913,58 @@ onMouseLeave={(e) => {
 
 {/* 🔁 KOLEJNA PŁATNOŚĆ */}
 {interpretation && (
-  <button
-    onClick={async () => {
-      const deviceId = getDeviceId();
+  <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
 
-      const type =
-        readingType || localStorage.getItem("readingType") || "general";
-
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          deviceId,
-          type,
-        }),
-      });
-
-      const data = await res.json();
-      window.location.href = data.url;
-    }}
+    {/* 🔁 POWRÓT DO OFERTY */}
+    <button
+      onClick={resetToOffer}
       style={{
-        padding: "14px 28px",
-        fontSize: 18,
+        padding: "12px 20px",
+        fontSize: 16,
+        background: "transparent",
+        color: "#fff",
+        border: "1px solid rgba(255,215,0,0.3)",
+        borderRadius: 10,
+        cursor: "pointer",
+      }}
+    >
+      Wróć do wyboru usług
+    </button>
+
+    {/* 💳 NOWY ZAKUP */}
+    <button
+      onClick={async () => {
+        const deviceId = getDeviceId();
+
+        const type =
+          readingType || localStorage.getItem("readingType") || "general";
+
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ deviceId, type }),
+        });
+
+        const data = await res.json();
+        window.location.href = data.url;
+      }}
+      style={{
+        padding: "12px 20px",
+        fontSize: 16,
         background: "linear-gradient(135deg, gold, #ffd700)",
         color: "#000",
         border: "none",
-        borderRadius: 12,
+        borderRadius: 10,
         cursor: "pointer",
       }}
     >
       Rozłóż ponownie
     </button>
-  )}
+
+  </div>
+)}
 </div>
 
 
