@@ -678,7 +678,7 @@ onMouseLeave={(e) => {
     e.currentTarget.style.boxShadow = "none";
   }}
 >
-<h3>Co on/ona do mnie czuje?</h3>
+<h3>Rozkład miłosny</h3>
 <p style={{ opacity: 0.7 }}>Ukryte emocje i prawdziwe intencje</p>
   <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
 </div>
