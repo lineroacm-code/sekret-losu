@@ -47,7 +47,18 @@ export default function Home() {
   const [isRevealing, setIsRevealing] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
-  const [readingType, setReadingType] = useState<"general" | "love" | "question" | null>(null);
+  const [readingType, setReadingType] = useState<
+  | "general"
+  | "love"
+  | "thinking"
+  | "feelings"
+  | "return"
+  | "week"
+  | "action"
+  | "distance"
+  | "question"
+  | null
+>(null);
   const [userQuestion, setUserQuestion] = useState("");
   const getDeviceId = () => {
       let id = localStorage.getItem("deviceId");
@@ -221,9 +232,72 @@ const drawCards = () => {
   "Interpretacja układu...",
 ];
 
+
+const getSectionTitles = (type: string | null) => {
+  if (type === "thinking") {
+    return [
+      "Co uruchomiło te myśli",
+      "Jak wygląda jego/jej proces myślowy",
+      "Czy te myśli będą wracać",
+    ];
+  }
+
+  if (type === "feelings") {
+    return [
+      "Skąd wzięły się te emocje",
+      "Co naprawdę czuje teraz",
+      "Dokąd to zmierza",
+    ];
+  }
+
+  if (type === "return") {
+    return [
+      "Co doprowadziło do rozstania",
+      "Dlaczego teraz nie wraca",
+      "Czy wróci",
+    ];
+  }
+
+  if (type === "distance") {
+    return [
+      "Co zaczęło się psuć",
+      "Co powoduje dystans teraz",
+      "Co będzie dalej",
+    ];
+  }
+
+  if (type === "action") {
+    return [
+      "Co doprowadziło do tej sytuacji",
+      "Co się stanie jeśli nic nie zrobisz",
+      "Co się stanie jeśli zrobisz pierwszy krok",
+    ];
+  }
+
+  if (type === "week") {
+    return [
+      "Co się właśnie kończy",
+      "Co dzieje się teraz",
+      "Co wydarzy się w najbliższych dniach",
+    ];
+  }
+
+  return ["Przeszłość", "Teraźniejszość", "Przyszłość"];
+};
 // 🔥 DODAJ TO TUTAJ (między loadingTexts a return)
 
-const handleCheckout = async (type: "general" | "love" | "question") => {
+const handleCheckout = async (
+  type:
+    | "general"
+    | "love"
+    | "thinking"
+    | "feelings"
+    | "return"
+    | "week"
+    | "action"
+    | "distance"
+    | "question"
+) => {
   setReadingType(type);
   localStorage.setItem("readingType", type);
 
@@ -600,8 +674,8 @@ onMouseLeave={(e) => {
     e.currentTarget.style.boxShadow = "none";
   }}
 >
-  <h3>Rozkład miłosny</h3>
-  <p style={{ opacity: 0.7 }}>Ukryte emocje i intencje</p>
+<h3>Co on/ona do mnie czuje?</h3>
+<p style={{ opacity: 0.7 }}>Ukryte emocje i prawdziwe intencje</p>
   <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
 </div>
 
@@ -629,8 +703,133 @@ onMouseLeave={(e) => {
   <p style={{ opacity: 0.7 }}>Pełna personalizacja</p>
   <div style={{ marginTop: 10, color: "gold" }}>Zadaj pytanie – 20 PLN</div>
 </div>
+
+<div
+  onClick={() => handleCheckout("thinking")}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  <h3>Czy on/ona o mnie myśli?</h3>
+  <p style={{ opacity: 0.7 }}>To, czego nie mówi</p>
+  <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
+</div>
+
+<div
+  onClick={() => handleCheckout("return")}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  <h3>Czy wróci do mnie?</h3>
+  <p style={{ opacity: 0.7 }}>Co naprawdę się wydarzy</p>
+  <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 12 PLN</div>
+</div>
+
+<div
+  onClick={() => handleCheckout("distance")}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  <h3>Dlaczego się oddalił(a)?</h3>
+  <p style={{ opacity: 0.7 }}>Co stoi za tym zachowaniem</p>
+  <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 12 PLN</div>
+</div>
+
+<div
+  onClick={() => handleCheckout("week")}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  <h3>Najbliższe 7 dni</h3>
+  <p style={{ opacity: 0.7 }}>Co się wydarzy teraz</p>
+  <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
+</div>
+
+<div
+  onClick={() => handleCheckout("action")}
+  style={{
+    width: 260,
+    background: "#111",
+    padding: 20,
+    borderRadius: 16,
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 30px rgba(255,215,0,0.2)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "none";
+  }}
+>
+  <h3>Czy zrobić pierwszy krok?</h3>
+  <p style={{ opacity: 0.7 }}>Czy warto działać</p>
+  <div style={{ marginTop: 10, color: "gold" }}>Sprawdź – 10 PLN</div>
+</div>
+
+
 </div>
 )}
+
+
+
 
 {/* 🔮 ROZŁÓŻ KARTY (po płatności) */}
 {paid && (justPaid || !interpretation) && (
@@ -817,7 +1016,7 @@ onMouseLeave={(e) => {
                   </div>
 
                   <div style={{ marginTop: 10, opacity: 0.7 }}>
-                    {["Przeszłość", "Teraźniejszość", "Przyszłość"][i]}
+                    {getSectionTitles(readingType)[i]}
                   </div>
                 </div>
               ))}
@@ -849,36 +1048,40 @@ onMouseLeave={(e) => {
     </div>
 
     {/* SEKCJE */}
-    {[
-      ["Przeszłość", interpretation.past],
-      ["Teraźniejszość", interpretation.present],
-      ["Przyszłość", interpretation.future],
-    ].map(([title, text], i) => (
-      <div key={i} style={{ marginBottom: 20 }}>
-        <div
-          style={{
-            color: "gold",
-            fontSize: 13,
-            letterSpacing: 1.5,
-            marginBottom: 10,
-            opacity: 0.8,
-          }}
-        >
-          {title.toUpperCase()}
-        </div>
+{getSectionTitles(readingType).map((title: string, i: number) => {
+  const texts = [
+    interpretation.past,
+    interpretation.present,
+    interpretation.future,
+  ];
 
-        <p
-          style={{
-            fontSize: 17,
-            lineHeight: 1.9,
-            color: "#ddd",
-          }}
-        >
-          {text}
-        </p>
+  return (
+    <div key={i} style={{ marginBottom: 20 }}>
+      <div
+        style={{
+          color: "gold",
+          fontSize: 13,
+          letterSpacing: 1.5,
+          marginBottom: 10,
+          opacity: 0.8,
+        }}
+      >
+        {title.toUpperCase()}
       </div>
-    ))}
 
+      <p
+        style={{
+          fontSize: 17,
+          lineHeight: 1.9,
+          color: "#ddd",
+        }}
+      >
+        {texts[i]}
+      </p>
+    </div>
+  );
+})}
+      
     {/* SYNTEZA */}
     <div
       style={{

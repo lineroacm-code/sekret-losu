@@ -9,19 +9,45 @@ export async function POST(req: Request) {
   try {
     const { deviceId, type } = await req.json();
 
-    // ✅ WALIDACJA
-    if (!["general", "love", "question"].includes(type)) {
+    // ✅ WALIDACJA — wszystkie typy
+    if (
+      ![
+        "general",
+        "love",
+        "question",
+        "thinking",
+        "feelings",
+        "return",
+        "week",
+        "action",
+        "distance",
+      ].includes(type)
+    ) {
       return NextResponse.json(
         { error: "Invalid type" },
         { status: 400 }
       );
     }
 
-    // ✅ MAPA PRICE ID (upewnij się że to price_ a nie prod_)
+    /**
+     * ✅ MAPA PRODUKTÓW → PRICE ID
+     *
+     * 🔴 TU MUSISZ WPISAĆ SWOJE price_xxx z Stripe
+     * (Dashboard → Products → Price)
+     */
     const priceMap: Record<string, string> = {
+      // stare
       general: "price_1TJhzWJkGpeXxxwVUMmw54Va",
       love: "price_1TOGYmJkGpeXxxwV27I9rYso",
       question: "price_1TOGhPJkGpeXxxwV4wx4o6EI",
+
+      // nowe produkty 👇
+      thinking: "price_1TSLapJkGpeXxxwVflMwfj28",   // ← podmień
+      feelings: "price_1TSLe1JkGpeXxxwVmMvFK7On",   // ← podmień
+      return: "price_1TSLfvJkGpeXxxwVaDyPpH5E",       // ← podmień
+      week: "price_1TSLgcJkGpeXxxwVQYG5EynZ",           // ← podmień
+      action: "price_1TSLhEJkGpeXxxwVtfBxrEo8",       // ← podmień
+      distance: "price_1TSLhqJkGpeXxxwVQJZCGQ4b",   // ← podmień
     };
 
     const priceId = priceMap[type];
@@ -33,9 +59,23 @@ export async function POST(req: Request) {
       );
     }
 
-    // 🔍 DEBUG (bardzo ważne teraz)
+    // 🔍 DEBUG
     console.log("👉 TYPE:", type);
     console.log("👉 PRICE ID:", priceId);
+
+    // 🧠 opcjonalne: dynamiczna nazwa (logi + analityka)
+    const productNameMap: Record<string, string> = {
+      general: "Rozkład ogólny",
+      love: "Rozkład miłosny",
+      question: "Własne pytanie",
+
+      thinking: "Czy on/ona o mnie myśli",
+      feelings: "Co on/ona czuje naprawdę",
+      return: "Czy wróci do mnie",
+      week: "Najbliższe 7 dni",
+      action: "Czy zrobić pierwszy krok",
+      distance: "Dlaczego się oddalił(a)",
+    };
 
     // ✅ STRIPE SESSION
     const session = await stripe.checkout.sessions.create({
@@ -56,6 +96,7 @@ export async function POST(req: Request) {
       metadata: {
         deviceId: deviceId || "unknown",
         type,
+        productName: productNameMap[type],
       },
     });
 
