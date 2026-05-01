@@ -9,61 +9,44 @@ export async function POST(req: Request) {
   try {
     const { deviceId, type } = await req.json();
 
-    // ✅ WALIDACJA — wszystkie typy
-    if (
-      ![
-        "general",
-        "love",
-        "question",
-        "thinking",
-        "feelings",
-        "return",
-        "week",
-        "action",
-        "distance",
-      ].includes(type)
-    ) {
-      return NextResponse.json(
-        { error: "Invalid type" },
-        { status: 400 }
-      );
+    // ✅ WALIDACJA
+    const allowedTypes = [
+      "general",
+      "love",
+      "question",
+      "thinking",
+      "feelings",
+      "return",
+      "week",
+      "action",
+      "distance",
+    ];
+
+    if (!allowedTypes.includes(type)) {
+      return NextResponse.json({ error: "Invalid type" }, { status: 400 });
     }
 
-    /**
-     * ✅ MAPA PRODUKTÓW → PRICE ID
-     *
-     * 🔴 TU MUSISZ WPISAĆ SWOJE price_xxx z Stripe
-     * (Dashboard → Products → Price)
-     */
+    // ✅ PRICE MAP
     const priceMap: Record<string, string> = {
-      // stare
       general: "price_1TJhzWJkGpeXxxwVUMmw54Va",
       love: "price_1TOGYmJkGpeXxxwV27I9rYso",
       question: "price_1TOGhPJkGpeXxxwV4wx4o6EI",
 
-      // nowe produkty 👇
-      thinking: "price_1TSLapJkGpeXxxwVflMwfj28",   // ← podmień
-      feelings: "price_1TSLe1JkGpeXxxwVmMvFK7On",   // ← podmień
-      return: "price_1TSLfvJkGpeXxxwVaDyPpH5E",       // ← podmień
-      week: "price_1TSLgcJkGpeXxxwVQYG5EynZ",           // ← podmień
-      action: "price_1TSLhEJkGpeXxxwVtfBxrEo8",       // ← podmień
-      distance: "price_1TSLhqJkGpeXxxwVQJZCGQ4b",   // ← podmień
+      thinking: "price_1TSLapJkGpeXxxwVflMwfj28",
+      feelings: "price_1TSLe1JkGpeXxxwVmMvFK7On",
+      return: "price_1TSLfvJkGpeXxxwVaDyPpH5E",
+      week: "price_1TSLgcJkGpeXxxwVQYG5EynZ",
+      action: "price_1TSLhEJkGpeXxxwVtfBxrEo8",
+      distance: "price_1TSLhqJkGpeXxxwVQJZCGQ4b",
     };
 
-    const priceId = priceMap[type];
+    const priceId = priceMap[type as keyof typeof priceMap];
 
     if (!priceId) {
-      return NextResponse.json(
-        { error: "Price not found" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Price not found" }, { status: 400 });
     }
 
-    // 🔍 DEBUG
-    console.log("👉 TYPE:", type);
-    console.log("👉 PRICE ID:", priceId);
-
-    // 🧠 opcjonalne: dynamiczna nazwa (logi + analityka)
+    // ✅ NAZWY (metadata)
     const productNameMap: Record<string, string> = {
       general: "Rozkład ogólny",
       love: "Rozkład miłosny",
@@ -81,6 +64,7 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
 
+      // 👉 zostawiamy jak masz (skoro BLIK działa u Ciebie)
       payment_method_types: ["card", "blik"],
 
       line_items: [
@@ -101,12 +85,11 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ url: session.url });
-
   } catch (err: any) {
     console.error("❌ STRIPE ERROR:", err);
 
     return NextResponse.json(
-      { error: "Stripe error" },
+      { error: err.message || "Stripe error" },
       { status: 500 }
     );
   }

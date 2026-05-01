@@ -145,6 +145,10 @@ if (sessionId) {
   setRevealed([false, false, false]);
 
   window.history.replaceState({}, "", "/");
+
+    setTimeout(() => {
+  startReadingFlow();
+}, 300);
 }
 }, []);
 
