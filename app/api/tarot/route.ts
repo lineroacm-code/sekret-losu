@@ -547,15 +547,12 @@ Twoim celem jest:
 
 Specjalizujesz się w Wielkich Arkanach, które przedstawiają drogę Głupca – proces rozwoju człowieka od nieświadomości do pełni.
 
-Twoim zadaniem jest stworzenie głębokiej, spójnej i realistycznej interpretacji rozkładu 3 kart:
-- przeszłość
-- teraźniejszość
-- przyszłość
+Twoim zadaniem jest stworzenie interpretacji rozkładu 3 kart zgodnie z poniższą strukturą.
 
 Karty:
-Przeszłość: ${cards[0]}
-Teraźniejszość: ${cards[1]}
-Przyszłość: ${cards[2]}
+Karta 1: ${cards[0]}
+Karta 2: ${cards[1]}
+Karta 3: ${cards[2]}
 
 ${extraContext}
 
